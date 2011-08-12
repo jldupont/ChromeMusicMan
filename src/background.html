@@ -1,0 +1,48 @@
+<html>
+ <!--
+ 	@title  MusicMan
+ 	@author Jean-Lou Dupont
+ 	@desc   Music Manager for music web-sites
+ 	
+  -->
+	<head>
+		<script src="oo.js"></script>
+
+		<script>
+			var isConnected=false;
+			var connection=null;
+			
+			function connect() {
+				connection=new WebSocket('ws://localhost:1337/')
+	
+				connection.onopen = function() {
+					console.log('connection.open');
+					isConnected=true;
+				};
+	
+				connection.onerror = function(error) {
+					console.log('connection error: '+error);
+				};
+	
+				connection.onmessage = function(msg) {
+					console.log(msg.data);
+				};
+	
+				connection.onclose = function(e) {
+					console.log("console close");
+					connection=null;
+					isConnected=false;
+				};
+			};
+
+			function reconnect() {
+				if (!isConnected)
+					connect(connection);
+				setTimeout(reconnect, 1000);
+			};
+
+			reconnect();
+		
+		</script>
+	</head>
+</html>

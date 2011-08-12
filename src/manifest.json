@@ -1,0 +1,7 @@
+{
+	"name": "MusicMan",
+	"version": "0.1",
+	"description": "Music Manager controls music web-site using the keyboard Media Keys", 
+	"background_page": "background.html"
+
+}
