@@ -7,41 +7,30 @@
   -->
 	<head>
 		<script src="oo.js"></script>
+		<script src="ws.js"></script>
 
 		<script>
-			var isConnected=false;
-			var connection=null;
+			var _debug=true;
+			var ws=null;
 			
-			function connect() {
-				connection=new WebSocket('ws://localhost:1337/')
-	
-				connection.onopen = function() {
-					console.log('connection.open');
-					isConnected=true;
-				};
-	
-				connection.onerror = function(error) {
-					console.log('connection error: '+error);
-				};
-	
-				connection.onmessage = function(msg) {
-					console.log(msg.data);
-				};
-	
-				connection.onclose = function(e) {
-					console.log("console close");
-					connection=null;
-					isConnected=false;
+			var onOpen=function() {
+				console.log("onOpen");
+			};
+			var onClose=function() {
+				console.log("onClose");
+			};
+			var onMsg=function(msg){
+				console.log(msg);
+			};
+			
+			var ManageConnection=function() {
+				if ((ws==null) || !ws.isConnected()) {
+					ws=new WS(onOpen, onMsg, onClose, _debug);
+					ws.connect();					
 				};
 			};
-
-			function reconnect() {
-				if (!isConnected)
-					connect(connection);
-				setTimeout(reconnect, 1000);
-			};
-
-			reconnect();
+			
+			setTimeout(ManageConnection, 1000);
 		
 		</script>
 	</head>
