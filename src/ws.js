@@ -9,7 +9,7 @@
  */
 
 function WS(on_open_callback, on_msg_callback, on_close_callback, debug) {
-	this.isConnected=false;
+	this.status=false;
 	this.connection=null;
 	this.debug=debug || false;
 	this.on_open=on_open_callback;
@@ -18,7 +18,7 @@ function WS(on_open_callback, on_msg_callback, on_close_callback, debug) {
 };
 
 WS.method("isConnected", function(){
-	return this.isConnected;
+	return this.status;
 });
 
 WS.method("connect", function(){
@@ -26,7 +26,7 @@ WS.method("connect", function(){
 	this.connection=new WebSocket('ws://localhost:1337/');
 	
 	this.connection.onopen= function() {
-		self.isConnected=true;
+		self.status=true;
 		if (self.debug) {
 			console.log("WS: connection open");
 		};
@@ -41,9 +41,10 @@ WS.method("connect", function(){
 	};
 	
 	this.connection.onclose= function(e) {
+		self.status=false;
 		self.on_close();
 		if (self.debug) {
 			console.log("WS: connection close");
-		};		
+		};
 	};
 });

@@ -8,29 +8,45 @@
 	<head>
 		<script src="oo.js"></script>
 		<script src="ws.js"></script>
+		<script src="scheduler.js"></script>
 
 		<script>
 			var _debug=true;
 			var ws=null;
+			//var sc=new Scheduler(_debug);
+			var sc=new Scheduler();
 			
 			var onOpen=function() {
 				console.log("onOpen");
 			};
 			var onClose=function() {
 				console.log("onClose");
+				ws=null;
 			};
 			var onMsg=function(msg){
 				console.log(msg);
 			};
 			
 			var ManageConnection=function() {
-				if ((ws==null) || !ws.isConnected()) {
+				if (ws==null)
+					console.log("ManageConnection: ws is null");
+				
+				if ((ws==null) || !(ws.isConnected())) {
 					ws=new WS(onOpen, onMsg, onClose, _debug);
 					ws.connect();					
 				};
 			};
-			
-			setTimeout(ManageConnection, 1000);
+
+			var EnsureConnection=function(scheduler, param) {
+				//console.log("EnsureConnection: begin");
+				ManageConnection();
+				//console.log("EnsureConnection: end");
+			};
+
+			setInterval(function(){
+				sc.push_task("EnsureConnection", EnsureConnection, null);	
+				sc.exec_stack();
+			}, 500);
 		
 		</script>
 	</head>
