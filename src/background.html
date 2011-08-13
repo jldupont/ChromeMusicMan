@@ -47,7 +47,14 @@
 				sc.push_task("EnsureConnection", EnsureConnection, null);	
 				sc.exec_stack();
 			}, 500);
-		
+
+			/*
+			 *  Messages from content scripts 
+			 */
+			chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+				console.log(request);
+			});
+			
 		</script>
 	</head>
 </html>
