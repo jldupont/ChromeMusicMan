@@ -19,6 +19,10 @@ WS.method("isConnected", function(){
 	return this.status;
 });
 
+WS.method("send", function(data){
+	this.connection.send(data);
+});
+
 WS.method("connect", function(){
 	var self=this;
 	this.connection=new WebSocket('ws://localhost:1337/');

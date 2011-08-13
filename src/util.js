@@ -10,6 +10,14 @@ function sendMsg(mtype, source, msg) {
 	});	
 };
 
+/**
+ * Akin to Python's 'startswith'
+ * 
+ * @return boolean
+ */
+function strStartsWith(str, start_string) {
+	return str.substr(0, start_string.length)==start_string;
+};
 
 /*
  * 
