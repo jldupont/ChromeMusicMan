@@ -1,6 +1,4 @@
 /*
- *  ws.js
- *  
  *   WebSocket
  *   
  *   @author Jean-Lou Dupont

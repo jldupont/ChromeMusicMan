@@ -7,7 +7,7 @@
  * id='playerDetails_nowPlaying'
  * 
  **/
-
+var port=chrome.extension.connect();
 var last_song=null;
 var last_artist=null;
 var last_album=null;
@@ -18,6 +18,10 @@ function getDetails(){
 
 var details=getDetails();
 
+/**
+ * Keep listening for changes to the part of the DOM
+ * where the current track information is displayed
+ */
 details.addEventListener('DOMSubtreeModified', function(evt){
 	console.log(evt);
 	
@@ -44,9 +48,40 @@ details.addEventListener('DOMSubtreeModified', function(evt){
 	last_artist=current_artist;
 	last_album=current_album;
 	
+	// report back to the extension
 	sendMsg('current_track', 'gs', {
 		'song': current_song,
 		'artist': current_artist,
 		'album': current_album
 	});
 });
+
+function doPreviousSong() {
+	simulateClick("player_previous");
+};
+
+function doNextSong() {
+	simulateClick("next");
+};
+
+function doPlayPause() {
+	simulateClick("player_play_pause");
+};
+
+/**
+ * Receive commands from the extension
+ */
+port.onMessage.addListener(function(msg){
+	var mtype=msg.mtype;
+	
+	if (mtype=='previous') {
+		doPreviousSong();
+	};
+	if (mtype=='next') {
+		doNextSong();
+	};
+	if (mtype=='play-pause') {
+		doPlayPause();
+	};
+});
+

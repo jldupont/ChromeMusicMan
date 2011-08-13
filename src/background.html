@@ -11,6 +11,7 @@
 		<script src="scheduler.js"></script>
 
 		<script>
+			var ports={};
 			var _debug=true;
 			var ws=null;
 			//var sc=new Scheduler(_debug);
@@ -53,6 +54,17 @@
 			 */
 			chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 				console.log(request);
+			});
+
+			/* 
+			 *  Content scripts connect through here
+			 *   Keep a reference to the tabs we can interact with
+			 */
+			chrome.extension.onConnect.addListener(function(port) {
+		    	var tid    = port.tab.id;
+		    	//var url    = port.tab.url;
+
+		    	ports[tid]=null;
 			});
 			
 		</script>
