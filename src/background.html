@@ -52,8 +52,9 @@
 			/*
 			 *  Messages from content scripts 
 			 */
-			chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-				console.log(request);
+			chrome.extension.onRequest.addListener(function(msg, sender, sendResponse) {
+				console.log("mtype: "+msg.mtype);
+				console.log(msg);
 			});
 
 			/* 
