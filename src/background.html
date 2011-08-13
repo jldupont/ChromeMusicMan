@@ -7,6 +7,7 @@
   -->
 	<head>
 		<script src="oo.js"></script>
+		<script src="util.js"></script>
 		<script src="ws.js"></script>
 		<script src="scheduler.js"></script>
 
@@ -17,7 +18,7 @@
 			var ports={};
 			var _debug=true;
 			var ws=null;
-			//var sc=new Scheduler(_debug);
+			
 			var sc=new Scheduler();
 			
 			var onOpen=function() {
@@ -27,8 +28,18 @@
 				console.log("onClose");
 				ws=null;
 			};
-			var onMsg=function(msg){
-				console.log(msg);
+			
+			var onMsg=function(str_msg){
+				//console.log("onMsg: str_msg: "+str_msg);
+				var msg=JSON.parse(str_msg);
+
+				if (msg.mtype!='mk_key_press')
+					return;
+				
+				sc.push_task("Send to tab", function(){
+					sendMsgToTab(current_player_tabid, {'mtype': msg.key});
+				}, null);
+				
 			};
 			
 			var ManageConnection=function() {
@@ -48,10 +59,24 @@
 			};
 
 			setInterval(function(){
+				sc.exec_stack();				
 				sc.push_task("EnsureConnection", EnsureConnection, null);	
-				sc.exec_stack();
 			}, 500);
 
+			
+// EXTENSION MESSAGING
+// -------------------
+			
+			var sendMsgToTab=function(tabid, msg) {
+				//console.log("SendMsgToTab: tabid("+tabid+"): "+msg.mtype);
+				if (tabid==undefined || tabid==null) {
+					console.warn("SendMsgToTab: tabid invalid");
+					return;
+				}
+				chrome.tabs.sendRequest(tabid, msg, function(response) {
+				});
+			};
+			
 			/**
 			 *  Messages from content scripts 
 			 *  'current_*' : [track|state]
@@ -67,7 +92,7 @@
 
 				if (sender_tab_id!=current_player_tabid) {
 					current_player_tabid=sender_tab_id;
-					console.log("New current player: "+sender_tab_id;); 
+					console.log("New current player: "+sender_tab_id); 
 					};
 								
 				//console.log("mtype: "+msg.mtype);

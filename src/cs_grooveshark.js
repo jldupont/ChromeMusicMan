@@ -7,7 +7,6 @@
  * id='playerDetails_nowPlaying'
  * 
  **/
-var port=chrome.extension.connect();
 var last_song=null;
 var last_artist=null;
 var last_album=null;
@@ -82,7 +81,7 @@ function doPreviousSong() {
 };
 
 function doNextSong() {
-	simulateClick("next");
+	simulateClick("player_next");
 };
 
 function doPlayPause() {
@@ -92,17 +91,20 @@ function doPlayPause() {
 /**
  * Receive commands from the extension
  */
-port.onMessage.addListener(function(msg){
-	var mtype=msg.mtype;
-	
-	if (mtype=='previous') {
-		doPreviousSong();
-	};
-	if (mtype=='next') {
-		doNextSong();
-	};
-	if (mtype=='play-pause') {
-		doPlayPause();
-	};
+chrome.extension.onRequest.addListener(
+	function(msg, sender, sendResponse) {
+		
+		console.log("gs.onMessage: mtype:"+msg.mtype);
+		var mtype=msg.mtype;
+		
+		if (mtype=='previous') {
+			doPreviousSong();
+		};
+		if (mtype=='next') {
+			doNextSong();
+		};
+		if (mtype=='play-pause') {
+			doPlayPause();
+		};			  
 });
 
