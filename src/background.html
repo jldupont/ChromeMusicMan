@@ -16,16 +16,18 @@
 			//  i.e. the tab where the 'current_*' updates are coming from
 			var current_player_tabid=null;
 			var ports={};
-			var _debug=true;
+			var _debug=false;
 			var ws=null;
 			
 			var sc=new Scheduler();
 			
 			var onOpen=function() {
-				console.log("onOpen");
+				if (_debug)
+					console.log("onOpen");
 			};
 			var onClose=function() {
-				console.log("onClose");
+				if (_debug)
+					console.log("onClose");
 				ws=null;
 			};
 			
@@ -44,7 +46,8 @@
 			
 			var ManageConnection=function() {
 				if (ws==null)
-					console.log("ManageConnection: ws is null");
+					if (_debug)
+						console.log("ManageConnection: ws is null");
 				
 				if ((ws==null) || !(ws.isConnected())) {
 					ws=new WS(onOpen, onMsg, onClose, _debug);
