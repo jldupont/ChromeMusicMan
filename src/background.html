@@ -58,8 +58,11 @@
 	
 			var displayConnectionStatus=function(scheduler, isOpen) {
 				var msg=isOpen ? "OK":":(";
-				console.log("displayConnectionStatus: "+msg);
+				//console.log("displayConnectionStatus: "+msg);
 				chrome.browserAction.setBadgeText({"text":msg});
+
+				var title=isOpen ? "MediaKeys Server OK":"MediaKeys Server not found :(";
+				chrome.browserAction.setTitle({"title": "Music Man - "+title});
 			};
 			
 			var ManageConnection=function() {
