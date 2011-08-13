@@ -16,7 +16,13 @@
 	      "matches": ["http://grooveshark.com/*"],
 	      "js": ["util.js", "cs_grooveshark.js"],
 	      "run_at": "document_idle"
+	    },
+	    {
+	      "matches": ["http://www.rdio.com/*"],
+	      "js": ["util.js", "cs_rdio.js"],
+	      "run_at": "document_idle"
 	    }
+	    
     ],
     "browser_action": {
     	"default_icon":  "icon24a.png",
