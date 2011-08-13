@@ -11,6 +11,7 @@ var port=chrome.extension.connect();
 var last_song=null;
 var last_artist=null;
 var last_album=null;
+var last_state=null;
 
 function getDetails(){
 	return document.getElementById('playerDetails_nowPlaying');
@@ -55,6 +56,26 @@ details.addEventListener('DOMSubtreeModified', function(evt){
 		'album': current_album
 	});
 });
+
+var button_play_pause=document.getElementById("player_play_pause");
+button_play_pause.addEventListener('DOMSubtreeModified', function(evt){
+	var classe=evt.target.className.toLowerCase();
+	var bits=classe.split(' ');
+	var state='disabled';
+	var inverted_state=bits[1] || "disabled";
+	
+	if (inverted_state=='pause') state='play';
+	if (inverted_state=='play')  state='pause';
+	//console.log("Play/Pause state: "+state);
+	
+	if (state!=last_state) {
+		sendMsg('current_state', 'gs', {
+			'state': state
+		});
+	}
+	last_state=state;
+});
+
 
 function doPreviousSong() {
 	simulateClick("player_previous");

@@ -6,7 +6,8 @@
 	"content_scripts": [
 	    {
 	      "matches": ["http://grooveshark.com/*"],
-	      "js": ["util.js", "cs_grooveshark.js"]
+	      "js": ["util.js", "cs_grooveshark.js"],
+	      "run_at": "document_idle"
 	    }
     ]
 }
