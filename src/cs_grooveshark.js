@@ -23,7 +23,7 @@ var details=getDetails();
  * where the current track information is displayed
  */
 details.addEventListener('DOMSubtreeModified', function(evt){
-	console.log(evt);
+	//console.log(evt);
 	
 	var details=getDetails();
 	
