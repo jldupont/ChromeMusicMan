@@ -24,11 +24,20 @@
 			var onOpen=function() {
 				if (_debug)
 					console.log("onOpen");
+				sc.push_task("onOpen", displayConnectionStatus, true);
 			};
-			var onClose=function() {
+			var onClose=function(wasOpen) {
+				//console.log("Was Open? "+wasOpen);
+				if (wasOpen)
+					sc.push_task("onClose", displayConnectionStatus, false);
+				
 				if (_debug)
 					console.log("onClose");
 				ws=null;
+			};
+
+			var onError=function(){
+				console.log("onError");
 			};
 			
 			var onMsg=function(str_msg){
@@ -43,6 +52,15 @@
 				}, null);
 				
 			};
+
+// ==================================================================
+//
+	
+			var displayConnectionStatus=function(scheduler, isOpen) {
+				var msg=isOpen ? "OK":":(";
+				console.log("displayConnectionStatus: "+msg);
+				chrome.browserAction.setBadgeText({"text":msg});
+			};
 			
 			var ManageConnection=function() {
 				if (ws==null)
@@ -50,7 +68,7 @@
 						console.log("ManageConnection: ws is null");
 				
 				if ((ws==null) || !(ws.isConnected())) {
-					ws=new WS(onOpen, onMsg, onClose, _debug);
+					ws=new WS(onOpen, onMsg, onClose, onError, _debug);
 					ws.connect();					
 				};
 			};

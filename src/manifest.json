@@ -8,7 +8,7 @@
 	"icons": { 
 				"16":  "icon16.jpg",
 				"24":  "icon24.jpg",
-				"48": "icon.jpg", 
+				"48":  "icon.jpg", 
 				"128": "icon128.jpg"
 				},
 	"content_scripts": [
@@ -17,5 +17,9 @@
 	      "js": ["util.js", "cs_grooveshark.js"],
 	      "run_at": "document_idle"
 	    }
-    ]
+    ],
+    "browser_action": {
+    	"default_icon":  "icon24a.png",
+    	"default_title": "Music Man"
+    }
 }
