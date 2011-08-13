@@ -1,8 +1,16 @@
 {
 	"name": "MusicMan",
 	"version": "0.1",
+	"id": "oeaicnknihekgeliplmphcbnolahdolp",
+	"key": "ilmkmflppkbonegjgiciggbgjmppfifh",
 	"description": "Music Manager controls music web-site using the keyboard Media Keys", 
 	"background_page": "background.html",
+	"icons": { 
+				"16":  "icon16.jpg",
+				"24":  "icon24.jpg",
+				"48": "icon.jpg", 
+				"128": "icon128.jpg"
+				},
 	"content_scripts": [
 	    {
 	      "matches": ["http://grooveshark.com/*"],
