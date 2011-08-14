@@ -64,6 +64,32 @@ details.addEventListener('DOMSubtreeModified', function(evt){
 	});
 });
 
+var playButton=document.getElementById("playButton");
+var pause_button=document.getElementById("pauseButton");
+
+playButton.addEventListener("click", function(evt){
+
+	sendMsg('current_state', 'gs', {
+		'state': "play"
+	});
+	last_state="play";
+});
+
+pauseButton.addEventListener("click", function(evt){
+	sendMsg('current_state', 'gs', {
+		'state': "pause"
+	});
+	last_state="pause";
+});
+
+
+//var playback_buttons=document.getElementById("playerNowPlayingContainer");
+
+//playback_buttons.addEventListener('DOMSubtreeModified', function(evt){
+//	var play_button=document.getElementById("playButton");
+//	var pause_button=document.getElementById("pauseButton");
+//});
+
 
 function doPreviousSong() {
 	simulateClick("previousButton");

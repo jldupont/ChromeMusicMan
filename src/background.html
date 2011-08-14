@@ -41,7 +41,7 @@
 			};
 			
 			var onMsg=function(str_msg){
-				//console.log("onMsg: str_msg: "+str_msg);
+				console.log("onMsg: str_msg: "+str_msg);
 				var msg=JSON.parse(str_msg);
 
 				if (msg.mtype!='mk_key_press')
@@ -114,6 +114,8 @@
 					return;
 				};
 
+				console.log("From tab("+sender_tab_id+"): "+msg.mtype);
+				
 				if (sender_tab_id!=current_player_tabid) {
 					current_player_tabid=sender_tab_id;
 					console.log("New current player: "+sender_tab_id); 

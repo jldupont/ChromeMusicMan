@@ -43,9 +43,8 @@ WS.method("connect", function(){
 	
 	this.connection.onmessage= function(msg) {
 		self.on_msg(msg.data);
-		if (self.debug) {
-			console.log(msg.data);
-		};		
+		if (self.debug)
+			console.log(msg.data);	
 	};
 	
 	this.connection.onclose= function(e) {
