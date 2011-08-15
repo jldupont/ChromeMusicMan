@@ -19,8 +19,17 @@
 			var ports={};
 			var _debug=false;
 			var ws=null;
-			
 			var sc=new Scheduler();
+			
+			// web-socket state
+			var ws_state=false;
+
+			// PubNub state
+			var pn_state=false;
+			
+			
+
+// ====================================================================================
 			
 			var onOpen=function() {
 				if (_debug)
@@ -120,9 +129,14 @@
 				console.log(msg);
 			};
 			
-			/**
-			 *  Messages from content scripts 
-			 *  'current_*' : [track|state]
+			/*
+			 *  Messages from:
+			 *	- content scripts
+			 *    'current_*' : [track|state]
+			 *
+			 *  - config page
+			 *    'status?'
+			 * 
 			 *   
 			 */
 			chrome.extension.onRequest.addListener(function(msg, sender, sendResponse) {
