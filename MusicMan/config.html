@@ -1,13 +1,24 @@
 <html>
+<head>
+	<script src="oo.js"></script>
+	<script src="util2.js"></script>
+	<script src="config.js"></script>
+</head>
+<!--
+	@author Jean-Lou Dupont
+	 
+	http://htmledit.squarefree.com/
+ -->
 	
+<body onload="body_loaded">
 <b>Enter your <a href="http://www.pubnub.com/">PubNub</a> keys:</b><br><br>
 
 <form>
-<table>
-<tr><td>Publish Key:</td><td><input type="text" name="pubkey" /></td></tr>
-<tr><td>Subscribe Key:</td><td><input type="text" name="subkey" /></td></tr>
-<tr><td>Secret Key:</td><td><input type="text" name="seckey" /></td></tr>
-<tr><td></td><td><button id="buttonApply">Apply</button></td></tr>
+<table id="keys">
+<tr><td>Publish Key:</td><td><input type="text" name="pubkey" id="pubkey"/></td></tr>
+<tr><td>Subscribe Key:</td><td><input type="text" name="subkey" id="subkey" /></td></tr>
+<tr><td>Secret Key:</td><td><input type="text" name="seckey" id="seckey"/></td></tr>
+<tr><td></td><td><button id="buttonApply" disabled=true>Apply</button></td></tr>
 </table>
 </form>
 <hr>
@@ -17,5 +28,5 @@
 <hr>
 <p>Need some <a href="http://www.systemical.com/doc/opensource/chrome-musicman">help</a>?</p>
 
-	
+</body>
 </html>
