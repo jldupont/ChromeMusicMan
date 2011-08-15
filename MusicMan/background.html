@@ -100,6 +100,11 @@
 				chrome.tabs.sendRequest(tabid, msg, function(response) {
 				});
 			};
+
+			function handle_config_message(msg) {
+				console.log("config message: ");
+				console.log(msg);
+			};
 			
 			/**
 			 *  Messages from content scripts 
@@ -107,6 +112,14 @@
 			 *   
 			 */
 			chrome.extension.onRequest.addListener(function(msg, sender, sendResponse) {
+				var sender_tab=sender.tab || null;
+
+				if (!sender_tab) {
+					// probably from the config.html page...
+					handle_config_message(msg);
+					return;
+				}//
+				
 				var sender_tab_id=sender.tab.id;
 				var mtype=msg.mtype;
 
