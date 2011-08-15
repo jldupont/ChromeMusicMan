@@ -97,7 +97,7 @@ function getText(id) {
 
 function setText(id, text) {
 	var e=$(id);
-	e.textContent=text;
+	e.value=text;
 };
 
 function saveKeys() {
