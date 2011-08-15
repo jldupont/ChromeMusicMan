@@ -21,10 +21,6 @@ function handle_keys_change(event) {
 
 function handle_apply_button_click(evt) {
 
-	//var pubkey=get_input_value("pubkey");
-	//var subkey=get_input_value("subkey");
-	//var seckey=get_input_value("seckey");
-
 	set_apply_button_disable_state(true);
 	
 	var form_data=getFormData("pubnub");
@@ -61,5 +57,20 @@ function body_loaded() {
 	
 	var seckey=$("seckey");
 	seckey.addEventListener("change", handle_keys_change);
+	
+	setInterval(doTasks, 1000);
 };
 
+function doTasks() {
+	updateStatus();
+};
+
+
+function updateStatus() {
+chrome.extension.sendRequest(
+		{mtype: "status?"}
+	, function(response) {
+		$("status").textContent=response.data;
+		  console.log("Status: "+response.data);
+		});		
+};

@@ -101,7 +101,20 @@
 				});
 			};
 
-			function handle_config_message(msg) {
+			function doSendStatus(sendResponse) {
+				sendResponse({
+					mtype: "status"
+					,data: "unknown"
+				});
+			};
+			
+			function handle_config_message(msg, sendResponse) {
+
+				if (msg.mtype=="status?") {
+					doSendStatus(sendResponse);
+					return;
+				}
+				
 				console.log("config message: ");
 				console.log(msg);
 			};
@@ -116,7 +129,7 @@
 
 				if (!sender_tab) {
 					// probably from the config.html page...
-					handle_config_message(msg);
+					handle_config_message(msg, sendResponse);
 					return;
 				}//
 				
