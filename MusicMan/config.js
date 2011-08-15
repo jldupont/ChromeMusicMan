@@ -15,6 +15,8 @@
  * 
  */
 
+var canEdit=false;
+
 function get_input_value(id) {
 	return pubkey=$(id).value;
 };
@@ -28,7 +30,7 @@ function handle_keys_change(event) {
 function handle_apply_button_click(evt) {
 
 	set_apply_button_disable_state(true);
-	saveKeys();
+	saveConfig();
 	
 	
 	var form_data=getFormData("pubnub");
@@ -44,7 +46,26 @@ function handle_apply_button_click(evt) {
 function set_apply_button_disable_state(state) {
 	
 	var button=$("buttonApply");
+	
+	if (!canEdit) {
+		button.disabled=true;
+		return;
+	}
+	
 	button.disabled=state;
+};
+
+function handle_enabled_click(evt) {
+	
+	localStorage["pubnub_enable"]=evt.target.checked || false;
+	
+	if (evt.target.checked) {
+		canEdit=true;
+		//set_apply_button_disable_state(false);
+	} else {
+		canEdit=false;
+		//set_apply_button_disable_state(true);
+	}
 };
 
 /**
@@ -54,18 +75,15 @@ function set_apply_button_disable_state(state) {
  */
 function body_loaded() {
 	
+	$("enabled").addEventListener("click", handle_enabled_click);
 	$("buttonApply").addEventListener("click", handle_apply_button_click);
 	$("pubkey").addEventListener("change", handle_keys_change);
 	$("subkey").addEventListener("change", handle_keys_change);
 	$("seckey").addEventListener("change", handle_keys_change);
 	
-	displayKeys();
+	displayUpdate();
 	
 	setInterval(doTasks, 1000);
-};
-
-function addEventListener(id, fnc) {
-	
 };
 
 function doTasks() {
@@ -82,11 +100,21 @@ chrome.extension.sendRequest(
 		});		
 };
 
-function displayKeys() {
+function displayUpdate() {
 	setText("pubkey", localStorage["pubkey"]);
 	setText("subkey", localStorage["subkey"]);
 	setText("seckey", localStorage["seckey"]);
+	var enabled=$("enabled").checked || false; 
 };
+
+function saveConfig() {
+	localStorage["pubkey"]=getText("pubkey");
+	localStorage["subkey"]=getText("subkey");
+	localStorage["seckey"]=getText("seckey");
+	localStorage["pubnub_enable"]=$("enabled").checked || false;
+};
+
+// ======================================================================================
 
 function getText(id) {
 	return $(id).value;
@@ -95,11 +123,5 @@ function getText(id) {
 function setText(id, text) {
 	var e=$(id);
 	e.value=text;
-};
-
-function saveKeys() {
-	localStorage["pubkey"]=getText("pubkey");
-	localStorage["subkey"]=getText("subkey");
-	localStorage["seckey"]=getText("seckey");
 };
 

@@ -77,7 +77,7 @@
 			*/
 			var displayConnectionStatus=function(scheduler) {
 				
-				var msg=isOpen ? "OK":":(";
+				var msg=ws_state ? "OK":":(";
 				//console.log("displayConnectionStatus: "+msg);
 				chrome.browserAction.setBadgeText({"text":msg});
 
