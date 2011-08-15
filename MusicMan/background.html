@@ -34,12 +34,15 @@
 			var onOpen=function() {
 				if (_debug)
 					console.log("onOpen");
-				sc.push_task("onOpen", displayConnectionStatus, true);
+				
+				ws_state=true;
+				sc.push_task("onOpen", displayConnectionStatus);
 			};
 			var onClose=function(wasOpen) {
-				//console.log("Was Open? "+wasOpen);
+				
+				ws_state=false;
 				if (wasOpen)
-					sc.push_task("onClose", displayConnectionStatus, false);
+					sc.push_task("onClose", displayConnectionStatus);
 				
 				if (_debug)
 					console.log("onClose");
@@ -66,7 +69,14 @@
 // ==================================================================
 //
 	
-			var displayConnectionStatus=function(scheduler, isOpen) {
+			/**
+			*  UPDATE browser-action area based on:
+		    *  - web-socket state
+		    *  - pubnub-state
+		    *
+			*/
+			var displayConnectionStatus=function(scheduler) {
+				
 				var msg=isOpen ? "OK":":(";
 				//console.log("displayConnectionStatus: "+msg);
 				chrome.browserAction.setBadgeText({"text":msg});
