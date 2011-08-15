@@ -30,6 +30,19 @@ function xdr(ctx, url, onsuccess, onerror){
 	xhr.send();
 };	
 
+/**
+ * ENCODE URL
+ * ==========
+ * var encoded_path = encode('path');
+ */
+function encode_url(path) {
+    return map( (encodeURIComponent(path)).split(''), function(chr) {
+        return "-_.!~*'()".indexOf(chr) < 0 ? chr :
+               "%"+chr.charCodeAt(0).toString(16).toUpperCase()
+    } ).join('');
+};
+
+
 function getFormData(form_id) {
 	var data={};
 	var fe=$(form_id);

@@ -34,9 +34,9 @@ PubNub.method("publish", function(msg, onsuccess, onerror){
 	     ,this.pubkey
 	     ,this.subkey
 	     ,0
-	     ,encode(this.channel)
+	     ,encode_url(this.channel)
 	     ,0
-	     ,encode(msg)
+	     ,encode_url(msg)
 	     ];
 	
 	xdr(null, uri, onsuccess, onerror);
@@ -52,14 +52,4 @@ PubNub.method("subscribe", function(){
 // HELPERS
 
 
-/**
- * ENCODE
- * ======
- * var encoded_path = encode('path');
- */
-function encode(path) {
-    return map( (encodeURIComponent(path)).split(''), function(chr) {
-        return "-_.!~*'()".indexOf(chr) < 0 ? chr :
-               "%"+chr.charCodeAt(0).toString(16).toUpperCase()
-    } ).join('');
-};
+

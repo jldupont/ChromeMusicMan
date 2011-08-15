@@ -28,6 +28,8 @@ function handle_keys_change(event) {
 function handle_apply_button_click(evt) {
 
 	set_apply_button_disable_state(true);
+	saveKeys();
+	
 	
 	var form_data=getFormData("pubnub");
 	form_data["mtype"]="pubnub_keys";
@@ -64,6 +66,8 @@ function body_loaded() {
 	var seckey=$("seckey");
 	seckey.addEventListener("change", handle_keys_change);
 	
+	displayKeys();
+	
 	setInterval(doTasks, 1000);
 };
 
@@ -77,6 +81,28 @@ chrome.extension.sendRequest(
 		{mtype: "status?"}
 	, function(response) {
 		$("status").textContent=response.data;
-		  console.log("Status: "+response.data);
+		  //console.log("Status: "+response.data);
 		});		
 };
+
+function displayKeys() {
+	setText("pubkey", localStorage["pubkey"]);
+	setText("subkey", localStorage["subkey"]);
+	setText("seckey", localStorage["seckey"]);
+};
+
+function getText(id) {
+	return $(id).value;
+};
+
+function setText(id, text) {
+	var e=$(id);
+	e.textContent=text;
+};
+
+function saveKeys() {
+	localStorage["pubkey"]=getText("pubkey");
+	localStorage["subkey"]=getText("subkey");
+	localStorage["seckey"]=getText("seckey");
+};
+
