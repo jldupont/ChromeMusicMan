@@ -1,9 +1,39 @@
 /**
+ * 
+ * @author Jean-Lou Dupont
+ */
+
+function getFormData(form_id) {
+	var data={};
+	var fe=$(form_id);
+	var inputs=fe.getElementsByTagName("input");
+
+	for (var index=0;index<inputs.length;index++) {
+		var input=inputs[index];
+		data[input.name]=input.value;
+		//console.log("name("+input.name+"): "+input.value);
+	};
+
+	return data;
+};
+
+function listAllProperties(o){     
+	var objectToInspect;     
+	var result = [];
+	
+	for(objectToInspect = o; objectToInspect !== null; objectToInspect = Object.getPrototypeOf(objectToInspect)){  
+		result = result.concat(Object.getOwnPropertyNames(objectToInspect));  
+	}
+	
+	return result; 
+}
+
+/**
  * $
  * =
  * var div = $('divid');
  */
-function $(id) { return document.getElementById(id) }
+function $(id) { return document.getElementById(id); };
 
 /**
  * LOG
