@@ -1,3 +1,3 @@
 zip:
-	cd src && zip ../ext.zip *.* -x test* 
+	cd MusicMan && zip ../ext.zip *.* -x test* 
 	

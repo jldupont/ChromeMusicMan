@@ -2,7 +2,6 @@
 	"name": "MusicMan",
 	"version": "0.1",
 	"id": "oeaicnknihekgeliplmphcbnolahdolp",
-	"key": "ilmkmflppkbonegjgiciggbgjmppfifh",
 	"description": "Music Manager controls music web-site using the keyboard Media Keys", 
 	"background_page": "background.html",
 	"icons": { 
@@ -26,6 +25,7 @@
     ],
     "browser_action": {
     	"default_icon":  "icon24a.png",
-    	"default_title": "Music Man"
+    	"default_title": "Music Man",
+    	"default_popup": "config.html"
     }
 }
