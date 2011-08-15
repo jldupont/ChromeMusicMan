@@ -27,5 +27,8 @@
     	"default_icon":  "icon24a.png",
     	"default_title": "Music Man",
     	"default_popup": "config.html"
-    }
+    },
+	"permissions": [
+    	"https://pubsub.pubnub.com/"
+  	]    
 }

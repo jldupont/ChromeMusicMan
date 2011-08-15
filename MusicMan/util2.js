@@ -3,6 +3,33 @@
  * @author Jean-Lou Dupont
  */
 
+//=============================================================================
+// XHR
+
+var XHR_READY_STATE_OPENED=1;
+var XHR_READY_STATE_DONE=4;
+
+function xdr(ctx, url, onsuccess, onerror){
+	var uri=url.join("/")
+	var xhr = new XMLHttpRequest();
+	
+	xhr.open("GET", uri, true);
+	
+	xhr.onreadystatechange = function() {
+		  if (xhr.readyState == XHR_READY_STATE_DONE) {
+			  if (xhr.status==200){
+				  if (onsucess)
+					  onsuccess(ctx, this.responseText);
+			  }
+			  else {
+				  if (onerror)
+					  onerror(ctx, this.responseText);
+			  }
+		  }
+	};
+	xhr.send();
+};	
+
 function getFormData(form_id) {
 	var data={};
 	var fe=$(form_id);
