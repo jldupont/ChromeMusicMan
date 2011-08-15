@@ -54,21 +54,18 @@ function set_apply_button_disable_state(state) {
  */
 function body_loaded() {
 	
-	var button=$("buttonApply");
-	button.addEventListener("click", handle_apply_button_click);
-	
-	var pubkey=$("pubkey");
-	pubkey.addEventListener("change", handle_keys_change);
-	
-	var subkey=$("subkey");
-	subkey.addEventListener("change", handle_keys_change);
-	
-	var seckey=$("seckey");
-	seckey.addEventListener("change", handle_keys_change);
+	$("buttonApply").addEventListener("click", handle_apply_button_click);
+	$("pubkey").addEventListener("change", handle_keys_change);
+	$("subkey").addEventListener("change", handle_keys_change);
+	$("seckey").addEventListener("change", handle_keys_change);
 	
 	displayKeys();
 	
 	setInterval(doTasks, 1000);
+};
+
+function addEventListener(id, fnc) {
+	
 };
 
 function doTasks() {
