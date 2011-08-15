@@ -9,6 +9,10 @@
  * 
  */
 
+function get_input_value(id) {
+	return pubkey=$(id).value;
+};
+
 function handle_keys_change(event) {
 
 	//var pubkey=$("pubkey");
@@ -21,9 +25,9 @@ function handle_keys_change(event) {
 
 function handle_apply_button_click(evt) {
 
-	var pubkey=$("pubkey").value;
-	var subkey=$("subkey").value;
-	var seckey=$("seckey").value;
+	var pubkey=get_input_value("pubkey");
+	var subkey=get_input_value("subkey");
+	var seckey=get_input_value("seckey");
 
 	set_apply_button_disable_state(true);
 	
