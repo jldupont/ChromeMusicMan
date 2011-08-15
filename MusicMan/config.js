@@ -3,6 +3,12 @@
  * 
  * @author Jean-Lou Dupont 
  * 
+ * MESSAGES OUT:
+ *  - "pubnub_keys"
+ *  - "status?"
+ * 
+ * MESSAGES IN:
+ *  - "status"
  * 
  * Dependencies:
  * 	- util2.js
