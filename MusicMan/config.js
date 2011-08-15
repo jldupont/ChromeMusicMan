@@ -30,7 +30,7 @@ function handle_apply_button_click(evt) {
 	chrome.extension.sendRequest({
 		"mtype": "pubnub_keys"
 		,"pubkey": pubkey
-		,"subkey": subkey,
+		,"subkey": subkey
 		,"seckey": seckey
 		
 	}, function(response) {
