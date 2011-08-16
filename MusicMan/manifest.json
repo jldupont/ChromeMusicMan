@@ -5,26 +5,26 @@
 	"description": "Music Manager controls music web-site using the keyboard Media Keys", 
 	"background_page": "background.html",
 	"icons": { 
-				"16":  "icon16.jpg",
-				"24":  "icon24.jpg",
-				"48":  "icon.jpg", 
-				"128": "icon128.jpg"
+				"16":  "res/icon16.jpg",
+				"24":  "res/icon24.jpg",
+				"48":  "res/icon.jpg", 
+				"128": "res/icon128.jpg"
 				},
 	"content_scripts": [
 	    {
 	      "matches": ["http://grooveshark.com/*"],
-	      "js": ["util.js", "cs_grooveshark.js"],
+	      "js": ["util.js", "cs/cs_grooveshark.js"],
 	      "run_at": "document_idle"
 	    },
 	    {
 	      "matches": ["http://www.rdio.com/*"],
-	      "js": ["util.js", "cs_rdio.js"],
+	      "js": ["util.js", "cs/cs_rdio.js"],
 	      "run_at": "document_idle"
 	    }
 	    
     ],
     "browser_action": {
-    	"default_icon":  "icon24a.png",
+    	"default_icon":  "res/icon24a.png",
     	"default_title": "Music Man",
     	"default_popup": "config.html"
     },
