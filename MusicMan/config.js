@@ -14,24 +14,23 @@
  * 	- util2.js
  * 
  */
+config={};
 
-var canEdit=false;
+config.pn_inputs=["pubkey", "subkey", "seckey"];
 
-function get_input_value(id) {
-	return pubkey=$(id).value;
-};
+config.keysChanged=false;
 
 function handle_keys_change(event) {
 
-	console.log("Key(s) change!");
-	set_apply_button_disable_state(false);
+	config.keysChanged=true;
+	updatePnForm();
 };
 
 function handle_apply_button_click(evt) {
 
 	set_apply_button_disable_state(true);
 	saveConfig();
-	
+	config.keysChanged=false;
 	
 	var form_data=getFormData("pubnub");
 	form_data["mtype"]="pubnub_keys";
@@ -43,29 +42,41 @@ function handle_apply_button_click(evt) {
 		});	
 };
 
+/*
+ * "Apply" Button
+ */
+function updatePnForm() {
+	if (canEditPubNub()) {
+		set_apply_button_disable_state(!config.keysChanged);
+		set_pn_form_disable_state(false);
+	} else {
+		set_apply_button_disable_state(true);
+		set_pn_form_disable_state(true);
+	}
+};
+
+function set_pn_form_disable_state(state) {
+	each(config.pn_inputs, function(input) {
+		if (state)
+			$(input).setAttribute("disabled");
+		else
+			$(input).removeAttribute("disabled");		
+	});
+};
+
 function set_apply_button_disable_state(state) {
 	
 	var button=$("buttonApply");
-	
-	if (!canEdit) {
-		button.disabled=true;
-		return;
-	}
-	
-	button.disabled=state;
+	if (state)
+		button.setAttribute("disabled");
+	else
+		button.removeAttribute("disabled");
 };
 
 function handle_enabled_click(evt) {
 	
-	localStorage["pubnub_enable"]=evt.target.checked || false;
-	
-	if (evt.target.checked) {
-		canEdit=true;
-		//set_apply_button_disable_state(false);
-	} else {
-		canEdit=false;
-		//set_apply_button_disable_state(true);
-	}
+	localStorage["pubnub_enabled"]=evt.target.checked || false;	
+	updatePnForm();
 };
 
 /**
@@ -75,43 +86,66 @@ function handle_enabled_click(evt) {
  */
 function body_loaded() {
 	
-	$("enabled").addEventListener("click", handle_enabled_click);
+	$("pn_enabled").addEventListener("click", handle_enabled_click);
 	$("buttonApply").addEventListener("click", handle_apply_button_click);
-	$("pubkey").addEventListener("change", handle_keys_change);
-	$("subkey").addEventListener("change", handle_keys_change);
-	$("seckey").addEventListener("change", handle_keys_change);
 	
-	displayUpdate();
+	each(config.pn_inputs, function(input) {
+		$(input).addEventListener("change", handle_keys_change);
+	});
 	
-	setInterval(doTasks, 1000);
+	initDisplay();
+	
+	setInterval(doTasks, 500);
 };
 
 function doTasks() {
 	updateStatus();
 };
 
-
+/*
+ * Request a "status" update from the extension
+ */
 function updateStatus() {
-chrome.extension.sendRequest(
-		{mtype: "status?"}
-	, function(response) {
-		$("status").textContent=response.data;
-		  //console.log("Status: "+response.data);
-		});		
-};
-
-function displayUpdate() {
-	setText("pubkey", localStorage["pubkey"]);
-	setText("subkey", localStorage["subkey"]);
-	setText("seckey", localStorage["seckey"]);
-	var enabled=$("enabled").checked || false; 
+	chrome.extension.sendRequest(
+			{mtype: "status?"}
+		, function(response) {
+			$("ws_status").textContent=response.ws_status;
+			$("pn_status").textContent=response.pn_status
+			});		
 };
 
 function saveConfig() {
 	localStorage["pubkey"]=getText("pubkey");
 	localStorage["subkey"]=getText("subkey");
 	localStorage["seckey"]=getText("seckey");
-	localStorage["pubnub_enable"]=$("enabled").checked || false;
+	localStorage["pubnub_enabled"]=$("pn_enabled").checked || false;
+};
+
+//======================================================================================
+
+function canEditPubNub() {
+	return $("pn_enabled").checked || false;
+};
+
+
+//======================================================================================
+
+function initDisplay() {
+	initKeys();
+	initCheckboxes();
+	updatePnForm();
+	updateStatus();
+};
+
+function initKeys() {
+	setText("pubkey", localStorage["pubkey"]);
+	setText("subkey", localStorage["subkey"]);
+	setText("seckey", localStorage["seckey"]);
+};
+
+function initCheckboxes() {
+	var pn_enabled=localStorage["pubnub_enabled"]==="true" || false;
+	$("pn_enabled").checked=pn_enabled;
 };
 
 // ======================================================================================
@@ -123,5 +157,9 @@ function getText(id) {
 function setText(id, text) {
 	var e=$(id);
 	e.value=text;
+};
+
+function get_input_value(id) {
+	return pubkey=$(id).value;
 };
 

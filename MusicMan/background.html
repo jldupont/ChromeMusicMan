@@ -22,10 +22,10 @@
 			var sc=new Scheduler();
 			
 			// web-socket state
-			var ws_state=false;
+			var ws_state=null;
 
 			// PubNub state
-			var pn_state=false;
+			var pn_state=null;
 			
 			
 
@@ -76,13 +76,15 @@
 		    *
 			*/
 			var displayConnectionStatus=function(scheduler) {
-				
-				var msg=ws_state ? "OK":":(";
-				//console.log("displayConnectionStatus: "+msg);
-				chrome.browserAction.setBadgeText({"text":msg});
 
-				var title=isOpen ? "MediaKeys Server OK":"MediaKeys Server not found :(";
-				chrome.browserAction.setTitle({"title": "Music Man - "+title});
+				var msg;
+				if ((ws_state===true || ws_state===null) && (pn_state===true || pn_state===null)) {
+					chrome.browserAction.setIcon({path:"icon24a.png"});
+					chrome.browserAction.setTitle({"title": "Music Man - "+"all is OK :)"});					
+				} else {
+					chrome.browserAction.setIcon({path:"icon_warn24x24.png"});
+					chrome.browserAction.setTitle({"title": "Music Man - "+"Warning..."});
+				}
 			};
 			
 			var ManageConnection=function() {
