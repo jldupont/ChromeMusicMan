@@ -27,29 +27,34 @@ Function.prototype.method = function (name, func) {
 	return this;
 };
 
-Function.method('inherits', function (parent) {
-    var d = {}, p = (this.prototype = new parent());
-    this.method('uber', function uber(name) {
-        if (!(name in d)) {
-            d[name] = 0;
-        }        
-        var f, r, t = d[name], v = parent.prototype;
-        if (t) {
-            while (t) {
-                v = v.constructor.prototype;
-                t -= 1;
-            }
-            f = v[name];
-        } else {
-            f = p[name];
-            if (f == this[name]) {
-                f = v[name];
-            }
+Object.prototype.clone=function(obj) {
+    // Handle the 3 simple types, and null or undefined
+    if (null == obj || "object" != typeof obj) return obj;
+
+    // Handle Date
+    if (obj instanceof Date) {
+        var copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
+    }
+
+    // Handle Array
+    if (obj instanceof Array) {
+        var copy = [];
+        for (var i = 0, len = obj.length; i < len; ++i) {
+            copy[i] = clone(obj[i]);
         }
-        d[name] += 1;
-        r = f.apply(this, Array.prototype.slice.apply(arguments, [1]));
-        d[name] -= 1;
-        return r;
-    });
-    return this;
-});
+        return copy;
+    }
+
+    // Handle Object
+    if (obj instanceof Object) {
+        var copy = {};
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+        }
+        return copy;
+    }
+
+    throw new Error("Unable to copy obj! Its type isn't supported.");
+}

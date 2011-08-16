@@ -12,11 +12,16 @@
  */
 
 function AnnouncerAgent() {
-	Agent.call(this);
-	console.log("AnnouncerAgent created");
+	this.Agent=new Agent();
+	this.count=0;
 };
 
-AnnouncerAgent.inherits(Agent);
+AnnouncerAgent.method("announce", function(){
+	if (this.count>10)
+		return;
+	console.log("announce!");
+	this.count++;
+});
 
 aAnnouncer=new AnnouncerAgent();
-aAnnouncer.init();
+aAnnouncer.Agent.push_task(aAnnouncer, aAnnouncer.announce);
