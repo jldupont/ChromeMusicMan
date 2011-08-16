@@ -11,17 +11,32 @@
  * @author Jean-Lou Dupont
  */
 
-function AnnouncerAgent() {
-	this.Agent=new Agent();
-	this.count=0;
+aAnnouncer=new Agent("Announcer");
+
+aAnnouncer.max_backoff=8;
+aAnnouncer.max_retries=3;
+aAnnouncer.sources={};
+
+/*
+ * API
+ */
+aAnnouncer.toAnnounce = function(source, msg) {
+	
+	msg.retries=max.retries || this.max_retries; 
+	this.sources[source]=msg;
 };
 
-AnnouncerAgent.method("announce", function(){
-	if (this.count>10)
-		return;
+/*
+ *  @process
+ *  Announces over PubNub the current state of the given 'source'
+ */
+aAnnouncer.announce = function(){
+
 	console.log("announce!");
 	this.count++;
-});
+	
+};
 
-aAnnouncer=new AnnouncerAgent();
-aAnnouncer.Agent.push_task(aAnnouncer, aAnnouncer.announce);
+
+// PROCESSES
+aAnnouncer.push_proc(aAnnouncer, aAnnouncer.announce);
