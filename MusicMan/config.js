@@ -12,7 +12,6 @@
  * 
  * Dependencies:
  * 	- util2.js
- * 
  */
 config={};
 

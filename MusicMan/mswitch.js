@@ -37,7 +37,7 @@ mswitch.method("publish", function(msg){
 	
 	var self=this;
 	
-	each(self.subscribers, function(agent, index){
+	each(self.subscribers, function(agent, _index){
 		
 		// check if the agent is *not* interested
 		var map=self.subscribe_map_not_interested[msg.type] || {};

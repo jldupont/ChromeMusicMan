@@ -20,6 +20,7 @@ aAnnouncer.per_second=2;  //cycles per second
 aAnnouncer.max_backoff=8; //seconds
 aAnnouncer.max_retries=3;
 aAnnouncer.sources={};
+aAnnouncer.pubnub_keys={};
 
 
 
@@ -54,6 +55,14 @@ aAnnouncer.toAnnounce = function(source_name, msg) {
 
 aAnnouncer.mailbox = function(msg){
 	console.log("aAnnouncer.mailbox: "+msg.mtype);
+	
+	if (msg.mtype=="pubnub_keys") {
+		this.pubnub_keys=msg.keys;
+		return true;
+	};
+	
+	// by default, not interested
+	return false;
 };
 
 /*
