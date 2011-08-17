@@ -14,11 +14,8 @@ function MSwitch() {
 	this.subscribers=[];
 	
 	// by mtype
-	this.subscribe_map_interested={};
 	this.subscribe_map_not_interested={};
 	
-	// agents by name
-	this.agent_map={};
 };
 
 /*
@@ -26,7 +23,7 @@ function MSwitch() {
  *  reply to a 'publish' with their "interest" 
  *  in a message type
  *  
- *  agent=[name, scope, fn]
+ *  agent={name, scope, fn}
  */
 mswitch.method("subscribe", function(agent){
 	this.subscribers.push(agent);
@@ -38,9 +35,27 @@ mswitch.method("publish", function(msg){
 		return;
 	};
 	
-	each(this.subscribers, function(agent, index){
+	var self=this;
+	
+	each(self.subscribers, function(agent, index){
 		
-	});
-});
+		// check if the agent is *not* interested
+		var map=self.subscribe_map_not_interested[msg.type] || {};
+		if (map[msg.type]!==undefined) {
+			return;
+		};
+		
+		var fn=agent.fn;
+		var scope=agent.scope;
+		var result=fn.call(scope, msg);
+		
+		if (result===false) {
+			map[msg.type]=true; //truly not intested
+			self.subscribe_map_not_interested[msg.type]=map;
+			console.log("mswitch: agent '"+agent.name+"' not interested in '"+msg.mtype+"'");
+		}
+	});//each
+	
+});//publish
 
 mswitch=new MSwitch();
