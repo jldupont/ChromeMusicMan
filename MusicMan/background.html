@@ -4,6 +4,10 @@
  	@author Jean-Lou Dupont
  	@desc   Music Manager for music web-sites
  	
+ 	Messages In:
+ 	- status?
+ 	- pubnub_keys
+ 	
   -->
 	<head>
 		<script src="oo.js"></script>
@@ -131,13 +135,20 @@
 					,data: "unknown"
 				});
 			};
-			
+
+			/*
+			 *  From the Config page
+			 */
 			function handle_config_message(msg, sendResponse) {
 
 				if (msg.mtype=="status?") {
 					doSendStatus(sendResponse);
 					return;
 				}
+				if (msg.mtype=="pubnub_keys") {
+					_.push_task(publishKeys);
+					return;
+				};
 				
 				console.log("config message: ");
 				console.log(msg);
@@ -201,6 +212,9 @@
 // =============================================================================================
 // =============================================================================================
 // =============================================================================================
+	
+	// INITIALIZATION
+	// **************
 	
 			_.push_task(publishKeys);
 	

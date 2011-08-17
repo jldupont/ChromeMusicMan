@@ -116,4 +116,7 @@ aAnnouncer=new Announcer();
 // PROCESSES
 _.push_proc(aAnnouncer, aAnnouncer.announce);
 
+// Hook-up to message switch
 mswitch.subscribe(aAnnouncer);
+
+
