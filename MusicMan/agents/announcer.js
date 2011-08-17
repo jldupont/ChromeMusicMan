@@ -20,10 +20,16 @@ aAnnouncer.sources={};
 /*
  * API
  */
-aAnnouncer.toAnnounce = function(source, msg) {
+aAnnouncer.toAnnounce = function(source_name, msg) {
 	
-	msg.retries=max.retries || this.max_retries; 
-	this.sources[source]=msg;
+	// get existing 'retries' from current entry for 'source'
+	// ... if it exists
+	var src=this.sources[source_name] || {};
+	var retries=src.retries || this.max_retries; 
+	
+	msg.retries=retries;
+	
+	this.sources[source_name]=msg;
 };
 
 /*
@@ -31,10 +37,22 @@ aAnnouncer.toAnnounce = function(source, msg) {
  *  Announces over PubNub the current state of the given 'source'
  */
 aAnnouncer.announce = function(){
-
-	console.log("announce!");
-	this.count++;
+	//console.log(".announce");
+	console.log(this.sources);
+	var toDelete=[];
 	
+	var self=this;
+	
+	each(this.sources, function(source_name, msg){
+		console.log("announce, source("+source_name+"): msg: "+msg);
+		self.sources[source_name].retries--;
+		if (self.sources[source_name].retries==0)
+			toDelete.push(source_name);
+	});
+	each(toDelete, function(source_name){
+		console.log("Deleting source("+source_name+")");
+		delete self.sources[source_name];
+	});
 };
 
 
