@@ -71,7 +71,8 @@ aAnnouncer.mailbox = function(msg){
  */
 aAnnouncer.announce = function(){
 	//console.log(".announce");
-	console.log(this.sources);
+	//console.log(this.sources);
+	
 	var toDelete=[];
 
 	// for the closures below...
