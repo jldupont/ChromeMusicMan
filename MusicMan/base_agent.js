@@ -1,6 +1,8 @@
 /*
  * Base class for Agents
  * 
+ * NOTE:   *not used* at the moment
+ * 
  * @dependencies:
  * 	- oo.js
  * 

@@ -13,15 +13,14 @@
  * @author Jean-Lou Dupont
  */
 
-aAnnouncer=new Agent("Announcer");
-
-aAnnouncer.pn=new PubNub();
-aAnnouncer.per_second=2;  //cycles per second
-aAnnouncer.max_backoff=8; //seconds
-aAnnouncer.max_retries=3;
-aAnnouncer.sources={};
-aAnnouncer.pubnub_keys={};
-
+var Announcer=function (){
+	this.pn=new PubNub();
+	this.per_second=2;  //cycles per second
+	this.max_backoff=8; //seconds
+	this.max_retries=3;
+	this.sources={};
+	this.pubnub_keys={};
+};
 
 
 /********************************************************************
@@ -31,7 +30,7 @@ aAnnouncer.pubnub_keys={};
 /*
  * Replace or Insert
  */
-aAnnouncer.toAnnounce = function(source_name, msg) {
+Announcer.method("toAnnounce", function(source_name, msg) {
 	
 	// get existing 'retries' from current entry for 'source'
 	// ... if it exists  OR insert a new one
@@ -47,13 +46,13 @@ aAnnouncer.toAnnounce = function(source_name, msg) {
 	msg.inprogress=inprogress;
 	
 	this.sources[source_name]=msg;
-};
+});
 
 
 // ******************************************************************************
 // ******************************************************************************
 
-aAnnouncer.mailbox = function(msg){
+Announcer.method("mailbox", function(msg){
 	console.log("aAnnouncer.mailbox: "+msg.type);
 	
 	if (msg.type=="pubnub_keys") {
@@ -63,13 +62,13 @@ aAnnouncer.mailbox = function(msg){
 	
 	// by default, not interested
 	return false;
-};
+});
 
 /*
  *  @process
  *  Announces over PubNub the current state of the given 'source'
  */
-aAnnouncer.announce = function(){
+Announcer.method("announce", function(){
 	//console.log(".announce");
 	//console.log(this.sources);
 	
@@ -102,18 +101,19 @@ aAnnouncer.announce = function(){
 		console.log("Deleting source("+source_name+")");
 		delete self.sources[source_name];
 	});
-};
+});
 
 /*
  * PubNub.method("publish", function(msg, onsuccess, onerror)
  */
-aAnnouncer.doPublish = function(source_name, msg){
+Announcer.method("doPublish", function(source_name, msg){
 	msg.inprogress=true;
 	
-};
+});
 
+aAnnouncer=new Announcer();
 
 // PROCESSES
-aAnnouncer.push_proc(aAnnouncer, aAnnouncer.announce);
+_.push_proc(aAnnouncer, Announcer.announce);
 
 mswitch.subscribe(aAnnouncer);

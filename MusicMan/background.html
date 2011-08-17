@@ -13,7 +13,7 @@
 		
 		<script src="ws.js"></script>
 		<script src="pubnub.js"></script>
-		<script src="scheduler.js"></script>
+		<script src="runner.js"></script>
 		
 		<script src="base_agent.js"></script>
 		<script src="agents/announcer.js"></script>
@@ -25,7 +25,6 @@
 			var ports={};
 			var _debug=false;
 			var ws=null;
-			var sc=new Scheduler();
 			
 			// web-socket state
 			var ws_state=null;
@@ -42,13 +41,13 @@
 					console.log("onOpen");
 				
 				ws_state=true;
-				sc.push_task("onOpen", displayConnectionStatus);
+				_.push_task(displayConnectionStatus);
 			};
 			var onClose=function(wasOpen) {
 				
 				ws_state=false;
 				if (wasOpen)
-					sc.push_task("onClose", displayConnectionStatus);
+					_.push_task(displayConnectionStatus);
 				
 				if (_debug)
 					console.log("onClose");
@@ -66,7 +65,7 @@
 				if (msg.mtype!='mk_key_press')
 					return;
 				
-				sc.push_task("Send to tab", function(){
+				_.push_task(function(){
 					sendMsgToTab(current_player_tabid, {'mtype': msg.key});
 				}, null);
 				
@@ -110,11 +109,8 @@
 				//console.log("EnsureConnection: end");
 			};
 
-			setInterval(function(){
-				sc.exec_stack();				
-				sc.push_task("EnsureConnection", EnsureConnection, null);	
-			}, 500);
-
+			_.push_proc(EnsureConnection, null);
+			
 			
 // EXTENSION MESSAGING
 // -------------------
@@ -206,7 +202,7 @@
 // =============================================================================================
 // =============================================================================================
 	
-			sc.push_task("publish_keys", publishKeys);
+			_.push_task(publishKeys);
 	
 			
 		</script>
