@@ -15,7 +15,7 @@
 
 aAnnouncer=new Agent("Announcer");
 
-aAnnouncer=new PubNub();
+aAnnouncer.pn=new PubNub();
 aAnnouncer.per_second=2;  //cycles per second
 aAnnouncer.max_backoff=8; //seconds
 aAnnouncer.max_retries=3;

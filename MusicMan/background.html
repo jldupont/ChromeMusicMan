@@ -194,9 +194,9 @@
 // =============================================================================================
 			function publishKeys() {
 				var keys={
-						pubkey: localStorage["pubkey"];
-						subkey: localStorage["subkey"];
-						seckey: localStorage["seckey"];						
+						pubkey: localStorage["pubkey"]
+						,subkey: localStorage["subkey"]
+						,seckey: localStorage["seckey"]						
 						};
 				var msg={ mtype: "pubnub_keys", keys: keys};
 				mswitch.publish(msg);

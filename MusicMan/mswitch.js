@@ -8,7 +8,7 @@
  * @author Jean-Lou Dupont
  */
 
-function MSwitch() {
+function _mswitch() {
 
 	// all
 	this.subscribers=[];
@@ -25,11 +25,11 @@ function MSwitch() {
  *  
  *  agent={name, scope, fn}
  */
-mswitch.method("subscribe", function(agent){
+_mswitch.method("subscribe", function(agent){
 	this.subscribers.push(agent);
 });
 
-mswitch.method("publish", function(msg){
+_mswitch.method("publish", function(msg){
 	if (msg.type===undefined) {
 		console.warn("mswitch.publish: type is undefined");
 		return;
@@ -58,4 +58,4 @@ mswitch.method("publish", function(msg){
 	
 });//publish
 
-mswitch=new MSwitch();
+mswitch=new _mswitch();
