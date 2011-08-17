@@ -45,9 +45,9 @@ mswitch.method("publish", function(msg){
 			return;
 		};
 		
-		var fn=agent.fn;
-		var scope=agent.scope;
-		var result=fn.call(scope, msg);
+		var fn=agent.mailbox;
+
+		var result=fn.call(agent, msg);
 		
 		if (result===false) {
 			map[msg.type]=true; //truly not intested

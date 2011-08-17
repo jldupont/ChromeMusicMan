@@ -8,6 +8,7 @@
  * 		- oo.js
  * 		- util2.js
  * 		- pubnub.js
+ *      - mswitch.js
  * 
  * @author Jean-Lou Dupont
  */
@@ -19,6 +20,8 @@ aAnnouncer.per_second=2;  //cycles per second
 aAnnouncer.max_backoff=8; //seconds
 aAnnouncer.max_retries=3;
 aAnnouncer.sources={};
+
+
 
 /********************************************************************
  * API
@@ -49,6 +52,9 @@ aAnnouncer.toAnnounce = function(source_name, msg) {
 // ******************************************************************************
 // ******************************************************************************
 
+aAnnouncer.mailbox = function(msg){
+	console.log("aAnnouncer.mailbox: "+msg.mtype);
+};
 
 /*
  *  @process
@@ -100,3 +106,4 @@ aAnnouncer.doPublish = function(source_name, msg){
 // PROCESSES
 aAnnouncer.push_proc(aAnnouncer, aAnnouncer.announce);
 
+mswitch.subscribe(aAnnouncer);
