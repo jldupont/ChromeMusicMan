@@ -46,12 +46,10 @@
 				return;
 			};
 			
-			var fn=agent.mailbox;
-			
 			if (self.debug)
 				console.log("mswitch.publish '"+msg.type+"'");
 			
-			var result=fn.call(agent, msg);
+			var result=agent.mailbox.call(agent, msg);
 			
 			if (result===false) {
 				map[msg.type]=true; //truly not intested
@@ -63,4 +61,4 @@
 	});//publish
 
 	mswitch=new _mswitch();	
-});
+})();
