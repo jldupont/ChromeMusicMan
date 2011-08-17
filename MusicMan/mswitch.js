@@ -52,7 +52,7 @@ _mswitch.method("publish", function(msg){
 		if (result===false) {
 			map[msg.type]=true; //truly not intested
 			self.subscribe_map_not_interested[msg.type]=map;
-			console.log("mswitch: agent '"+agent.name+"' not interested in '"+msg.mtype+"'");
+			console.log("mswitch: agent '"+agent.name+"' not interested in '"+msg.type+"'");
 		}
 	});//each
 	
