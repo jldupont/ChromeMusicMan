@@ -54,9 +54,9 @@ aAnnouncer.toAnnounce = function(source_name, msg) {
 // ******************************************************************************
 
 aAnnouncer.mailbox = function(msg){
-	console.log("aAnnouncer.mailbox: "+msg.mtype);
+	console.log("aAnnouncer.mailbox: "+msg.type);
 	
-	if (msg.mtype=="pubnub_keys") {
+	if (msg.type=="pubnub_keys") {
 		this.pubnub_keys=msg.keys;
 		return true;
 	};
