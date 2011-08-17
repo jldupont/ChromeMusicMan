@@ -114,6 +114,6 @@ Announcer.method("doPublish", function(source_name, msg){
 aAnnouncer=new Announcer();
 
 // PROCESSES
-_.push_proc(aAnnouncer, Announcer.announce);
+_.push_proc(aAnnouncer, aAnnouncer.announce);
 
 mswitch.subscribe(aAnnouncer);
