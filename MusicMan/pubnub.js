@@ -105,7 +105,13 @@
 		 * msg.album
 		 * msg.song
 		 * 
-		 * @TODO: add UUID...
+		 * {"type":"current_track",
+		 * 		"source_uuid":"F1168B4BCFDB4DF097948826580788A1",
+		 * 		"source":"gs",
+		 * 		"artist":"OceanLab",
+		 * 		"album":"Sirens of the Sea",
+		 * 		"song":"I Am What I Am"
+		 * }
 		 * XXX
 		 */
 		if (msg.type=="announce_track") {
