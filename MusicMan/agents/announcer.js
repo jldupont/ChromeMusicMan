@@ -109,7 +109,7 @@ Announcer.method("announce", function(){
 				msg.wait--;
 			}
 			if (msg.wait==0) {
-				this.doPubNubPublish(source_name, msg);
+				self.doPubNubPublish(source_name, msg);
 			}
 		};
 	});
