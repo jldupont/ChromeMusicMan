@@ -75,13 +75,14 @@ Announcer.method("mailbox", function(msg){
 		return true;
 	};
 	
+	// CAUTION:  ctx==source
 	if (msg.type=="announce_result") {
 		console.log("Announcer: announce result: "+msg.status);
 		if (msg.status=="success") {
-			delete this.sources[msg.source];
+			delete this.sources[msg.ctx];
 			mswitch.publish({ type: "pubnub_ok" });
 		} else {
-			this.sources[msg.source].inprogress=false;
+			this.sources[msg.ctx].inprogress=false;
 		}
 		return true;
 	};
