@@ -221,7 +221,7 @@ function createUUID() {
 /*
  * 
  */
-function timestampUTC() {
+function getUTCTimestamp() {
 	var d=new Date();
 	return Date.parse(d.toUTCString());
 };

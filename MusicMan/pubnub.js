@@ -35,6 +35,8 @@
 		this.keys={};
 		this.name="PubNub";
 		this.uuid=null;
+		this.last_server_timestamp=null;
+		this.ts_threshold=5; //seconds
 	};
 
 	PubNub.method("success", function(ctx, response){
@@ -54,7 +56,13 @@
 		});		
 	}); 	
 	
-	PubNub.method("publish", function(msg){		
+	PubNub.method("publish", function(msg){
+		
+		// we need to add a timestamp to all
+		// outgoing messages in order to perform
+		// garbage collection
+		msg.ts=getUTCTimestamp();
+		
 		url=[
 		     PUBNUB_WS
 		     ,'publish'
@@ -94,6 +102,55 @@
 
 	PubNub.method("subscribe", function(){
 		
+		var localTS=getUTCTimestamp();
+		
+		url=[
+		     PUBNUB_WS
+		     ,'subscribe'
+		     ,this.keys["subkey"]
+		     ,encode_url(this.channel)
+		     ,0
+		     ,encode_url(JSON.stringify(msg))
+		     ,localTS
+		     ];
+		
+		var self=this;
+		xdr(msg, url,
+			//on success
+			// [[records...], server_timestamp]
+			function(ctx, response){
+				try {
+					var respj=JSON.parse(response);
+					var liste=respj[0];
+					var server_ts=respj[1];
+					if (server_ts==self.last_server_timestamp){
+						if (self.debug) {
+							console.log("pubnub: no new messages");
+							return;
+						};
+					}
+					each(liste, function(item){
+						if (item.source_uudi===undefined) {
+							console.warn("pubnub: message without a 'uuid': "+response);
+							return;
+						}
+						if (item.source_uudi==self.uuid) {
+							if (self.debug) {
+								console.log("pubnub: message from self discarded");
+							}
+						}
+						
+					});//each liste
+					
+				}catch(e){
+					self.error(ctx, response);
+				}
+			},
+			//on error
+			function(ctx, response){
+				self.error(ctx, response);
+			}
+		);
 	});
 
 	PubNub.method("mailbox", function(msg){
