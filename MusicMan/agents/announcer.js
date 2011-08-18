@@ -92,7 +92,7 @@ Announcer.method("announce", function(){
 				msg.wait--;
 			}
 			if (msg.wait==0) {
-				this.doPublish(source_name, msg);
+				this.doPubNubPublish(source_name, msg);
 			}
 		};
 	});
@@ -106,7 +106,7 @@ Announcer.method("announce", function(){
 /*
  * PubNub.method("publish", function(msg, onsuccess, onerror)
  */
-Announcer.method("doPublish", function(source_name, msg){
+Announcer.method("doPubNubPublish", function(source_name, msg){
 	msg.inprogress=true;
 	
 });
