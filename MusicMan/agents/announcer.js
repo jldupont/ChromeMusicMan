@@ -142,7 +142,7 @@ Announcer.method("announce", function(){
  * PubNub.method("publish", function(msg, onsuccess, onerror)
  */
 Announcer.method("doPubNubPublish", function(source_name, msg){
-	console.log("Announcer.doPubNubPublish");
+	//console.log("Announcer.doPubNubPublish");
 	
 	msg.inprogress=true;
 	mswitch.publish({
