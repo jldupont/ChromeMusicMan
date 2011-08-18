@@ -51,16 +51,27 @@
 		     ,encode_url(msg)
 		     ];
 		
+		var self=this;
 		xdr(null, uri,
 				
 			//on success
-			function(){
-				
+			function(ctx, response){
+				mswitch.publish({
+					type:    "announce_result"
+					,status: "success"
+					,data:   response
+				});
 			},
 			//on error
-			function(){
-				
-		});
+			function(ctx, response){
+				mswitch.publish({
+					type:	"announce_result"
+					,state: "error"
+					,data:  response
+				});
+			}
+		);//xdr
+		
 	});
 
 	PubNub.method("subscribe", function(){
