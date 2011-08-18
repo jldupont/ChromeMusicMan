@@ -18,6 +18,7 @@
  * MESSAGES OUT:
  * - announce_track
  * - pubnub_error
+ * - pubnub_ok
  * 
  * @author Jean-Lou Dupont
  */
@@ -76,10 +77,12 @@ Announcer.method("mailbox", function(msg){
 	
 	if (msg.type=="announce_result") {
 		console.log("Announcer: announce result: "+msg.status);
-		if (msg.status=="success")
+		if (msg.status=="success") {
 			delete this.sources[msg.source];
-		else
+			mswitch.publish({ type: "pubnub_ok" });
+		} else {
 			this.sources[msg.source].inprogress=false;
+		}
 		return true;
 	};
 	
