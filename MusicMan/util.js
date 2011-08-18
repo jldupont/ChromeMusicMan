@@ -3,8 +3,8 @@
  * 
  */
 
-function sendMsg(mtype, source, msg) {
-	msg['mtype']=mtype;
+function sendMsg(type, source, msg) {
+	msg['type']=type;
 	msg["source"]=source
 	chrome.extension.sendRequest(msg, function(response) {
 	});	

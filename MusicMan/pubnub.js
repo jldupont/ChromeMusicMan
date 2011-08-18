@@ -57,6 +57,14 @@
 			return true; // we are interested
 		};
 		
+		/*
+		 * msg.ctx    : context
+		 * msg.source : which player
+		 * msg.artist
+		 * msg.album
+		 * msg.song
+		 * 
+		 */
 		if (msg.type=="announce_track") {
 			
 			return true;

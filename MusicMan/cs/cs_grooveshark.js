@@ -98,16 +98,16 @@ function doPlayPause() {
 chrome.extension.onRequest.addListener(
 	function(msg, sender, sendResponse) {
 		
-		console.log("gs.onMessage: mtype:"+msg.mtype);
-		var mtype=msg.mtype;
+		console.log("gs.onMessage: type:"+msg.type);
+		var type=msg.type;
 		
-		if (mtype=='previous') {
+		if (type=='previous') {
 			doPreviousSong();
 		};
-		if (mtype=='next') {
+		if (type=='next') {
 			doNextSong();
 		};
-		if (mtype=='play-pause') {
+		if (type=='play-pause') {
 			doPlayPause();
 		};			  
 });

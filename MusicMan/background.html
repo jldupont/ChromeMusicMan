@@ -68,9 +68,11 @@
 
 				if (msg.mtype!='mk_key_press')
 					return;
+
+				msg.type=msg.mtype;
 				
 				_.push_task(function(){
-					sendMsgToTab(current_player_tabid, {'mtype': msg.key});
+					sendMsgToTab(current_player_tabid, {'type': msg.key});
 				}, null);
 				
 			};
@@ -174,18 +176,23 @@
 				}//
 				
 				var sender_tab_id=sender.tab.id;
-				var mtype=msg.mtype;
+				var type=msg.type;
 
-				if (!strStartsWith(mtype, "current")) {
+				if (!strStartsWith(type, "current")) {
 					return;
 				};
 
-				console.log("From tab("+sender_tab_id+"): "+msg.mtype);
+				console.log("From tab("+sender_tab_id+"): "+msg.type);
 				
 				if (sender_tab_id!=current_player_tabid) {
 					current_player_tabid=sender_tab_id;
 					console.log("New current player: "+sender_tab_id); 
 					};
+
+				if (type=="current_track") {
+					mswitch.publish(msg);
+					return;
+				};
 			});
 
 			/* 

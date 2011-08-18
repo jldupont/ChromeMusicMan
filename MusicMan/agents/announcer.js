@@ -14,7 +14,6 @@
  */
 
 var Announcer=function (){
-	this.pn=new PubNub();
 	this.per_second=2;  //cycles per second
 	this.max_backoff=8; //seconds
 	this.max_retries=3;
