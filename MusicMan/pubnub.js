@@ -142,7 +142,7 @@
 					}
 					each(liste, function(item){
 						if (item.source_uudi===undefined) {
-							console.warn("pubnub: message without a 'uuid': "+item);
+							//console.warn("pubnub: message without a 'uuid': "+item);
 							return;
 						}
 						if (item.source_uudi==self.uuid) {
