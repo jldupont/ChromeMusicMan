@@ -10,6 +10,7 @@
  * MESSAGES IN:
  * - announce_track
  * - pubnub_keys
+ * - uuid
  * 
  * 
  * PubNub HTTP I/F:
@@ -33,6 +34,7 @@
 		this.channel="music";
 		this.keys={};
 		this.name="PubNub";
+		this.uuid=null;
 	};
 
 	PubNub.method("success", function(ctx, response){
@@ -96,11 +98,6 @@
 
 	PubNub.method("mailbox", function(msg){
 		
-		if (msg.type=="pubnub_keys") {
-			this.keys=msg.keys;
-			return true; // we are interested
-		};
-		
 		/*
 		 * msg.ctx    : context
 		 * msg.source : which player
@@ -114,11 +111,22 @@
 		if (msg.type=="announce_track") {
 			this.publish({
 				type:    "current_track"
+				,source_uuid: this.uuid
 				,source: msg.source
 				,artist: msg.artist
 				,album:  msg.album
 				,song:   msg.song
 			});
+			return true;
+		};
+		
+		if (msg.type=="pubnub_keys") {
+			this.keys=msg.keys;
+			return true; // we are interested
+		};
+		
+		if (msg.type=="uuid") {
+			this.uuid=msg.uuid;
 			return true;
 		};
 		

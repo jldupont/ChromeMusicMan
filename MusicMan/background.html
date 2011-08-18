@@ -228,7 +228,12 @@
 	// **************
 	
 			_.push_task(publishKeys);
-	
+
+			var uuid=localStorage["uuid"] || createUUID();
+			mswitch.publish({
+				type: "uuid"
+				,"uuid": uuid
+			});
 			
 		</script>
 	</head>
