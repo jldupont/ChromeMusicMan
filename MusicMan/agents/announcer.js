@@ -13,7 +13,10 @@
  * MESSAGES IN:
  * - current_track
  * - pubnub_keys
+ * - announce_result
  * 
+ * MESSAGES OUT:
+ * - announce_track
  * 
  * @author Jean-Lou Dupont
  */
@@ -69,6 +72,11 @@ Announcer.method("mailbox", function(msg){
 		return true;
 	};
 	
+	if (msg.type=="announce_result") {
+
+		return true;
+	};
+	
 	// by default, not interested
 	return false;
 });
@@ -117,7 +125,14 @@ Announcer.method("announce", function(){
  */
 Announcer.method("doPubNubPublish", function(source_name, msg){
 	msg.inprogress=true;
-	
+	mswitch.publish({
+		type: "announce_track"
+		,source: msg.source
+		,ctx:    msg.source
+		,artist: msg.artist
+		,album:  msg.album
+		,song:   msg.song
+	});
 });
 
 aAnnouncer=new Announcer();
