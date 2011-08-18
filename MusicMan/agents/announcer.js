@@ -74,6 +74,10 @@ Announcer.method("mailbox", function(msg){
 	
 	if (msg.type=="announce_result") {
 		console.log("Announcer: announce result: "+msg.status);
+		if (msg.status=="success")
+			delete this.sources[msg.source];
+		else
+			this.sources[msg.source].inprogress=false;
 		return true;
 	};
 	
