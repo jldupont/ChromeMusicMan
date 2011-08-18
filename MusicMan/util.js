@@ -3,6 +3,14 @@
  * 
  */
 
+function copyObject(o) {
+	var copy=new Object();
+	for (var attr in o) {
+		copy[attr]=o[attr];
+	};
+	return copy;
+};
+
 function sendMsg(type, source, msg) {
 	msg['type']=type;
 	msg["source"]=source

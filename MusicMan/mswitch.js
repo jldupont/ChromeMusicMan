@@ -1,6 +1,8 @@
 /*
  * Message Switch
  * 
+ * NOTE:  'no interest' map stored in the Agent
+ * 
  * @dependencies:
  * 	- oo.js
  *  - util2.js  ('each')
@@ -13,10 +15,7 @@
 	function _mswitch() {
 
 		// all
-		this.subscribers=[];
-		
-		// by mtype
-		this.subscribe_map_not_interested={};
+		this.subscribers=[];		
 	};
 
 	/*
@@ -41,7 +40,8 @@
 		each(self.subscribers, function(agent, _index){
 			
 			// check if the agent is *not* interested
-			var map=self.subscribe_map_not_interested[msg.type] || {};
+			var map=agent.mswitch_subscribe_map_not_interested || {};
+			
 			if (map[msg.type]!==undefined) {
 				return;
 			};
@@ -53,7 +53,7 @@
 			
 			if (result===false) {
 				map[msg.type]=true; //truly not intested
-				self.subscribe_map_not_interested[msg.type]=map;
+				agent.mswitch_subscribe_map_not_interested=map;
 				console.log("mswitch: agent '"+agent.name+"' not interested in '"+msg.type+"'");
 			}
 		});//each

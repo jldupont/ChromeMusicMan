@@ -41,6 +41,8 @@ var Announcer=function (){
  * Replace or Insert
  */
 Announcer.method("toAnnounce", function(source_name, msg) {
+	console.log("toAnnounce");
+	console.log(msg);
 	
 	// get existing 'retries' from current entry for 'source'
 	// ... if it exists  OR insert a new one
@@ -78,11 +80,15 @@ Announcer.method("mailbox", function(msg){
 	// CAUTION:  ctx==source
 	if (msg.type=="announce_result") {
 		console.log("Announcer: announce result: "+msg.status);
+		
+		var source=msg.ctx.source;
 		if (msg.status=="success") {
-			delete this.sources[msg.ctx];
+			delete this.sources[source];
+			console.log("Announcer: success with '"+source+"'");
+			console.log(this.sources);
 			mswitch.publish({ type: "pubnub_ok" });
 		} else {
-			this.sources[msg.ctx].inprogress=false;
+			this.sources[source].inprogress=false;
 		}
 		return true;
 	};
@@ -96,7 +102,7 @@ Announcer.method("mailbox", function(msg){
  *  Announces over PubNub the current state of the given 'source'
  */
 Announcer.method("announce", function(){
-	//console.log(".announce");
+	//console.log("Announcer.announce");
 	//console.log(this.sources);
 	
 	var toDelete=[];
@@ -109,7 +115,8 @@ Announcer.method("announce", function(){
 		if (msg.inprogress)
 			return;
 		
-		console.log("announce, source("+source_name+"): msg: "+msg);
+		console.log("announce, source("+source_name+")");
+		console.log(msg);
 		
 		msg.retries--;
 		if (msg.retries==0) {
@@ -135,6 +142,8 @@ Announcer.method("announce", function(){
  * PubNub.method("publish", function(msg, onsuccess, onerror)
  */
 Announcer.method("doPubNubPublish", function(source_name, msg){
+	console.log("Announcer.doPubNubPublish");
+	
 	msg.inprogress=true;
 	mswitch.publish({
 		type: "announce_track"

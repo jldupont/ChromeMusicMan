@@ -193,7 +193,8 @@
 					};
 
 				if (type=="current_track") {
-					mswitch.publish(msg);
+					var cmsg=copyObject(msg)
+					mswitch.publish(cmsg);
 					return;
 				};
 			});
