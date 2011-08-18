@@ -48,7 +48,7 @@
 		     ,0
 		     ,encode_url(this.channel)
 		     ,0
-		     ,encode_url(msg)
+		     ,encode_url(msg.toString())
 		     ];
 		
 		var self=this;
@@ -94,9 +94,17 @@
 		 * msg.album
 		 * msg.song
 		 * 
+		 * @TODO: add UUID...
+		 * XXX
 		 */
 		if (msg.type=="announce_track") {
-			this.publish(msg.toString());
+			this.publish({
+				type:    "current_track"
+				,source: msg.source
+				,artist: msg.artist
+				,album:  msg.album
+				,song:   msg.song
+			});
 			return true;
 		};
 	});

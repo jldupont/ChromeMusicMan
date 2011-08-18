@@ -73,7 +73,7 @@ Announcer.method("mailbox", function(msg){
 	};
 	
 	if (msg.type=="announce_result") {
-
+		console.log("Announcer: announce result: "+msg.status);
 		return true;
 	};
 	
