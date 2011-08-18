@@ -52,7 +52,7 @@
 		     ];
 		
 		var self=this;
-		xdr(msg.source, uri,
+		xdr(msg.source, url,
 				
 			//on success
 			function(ctx, response){

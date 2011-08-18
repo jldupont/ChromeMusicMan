@@ -18,7 +18,7 @@ function xdr(ctx, url, onsuccess, onerror){
 	xhr.onreadystatechange = function() {
 		  if (xhr.readyState == XHR_READY_STATE_DONE) {
 			  if (xhr.status==200){
-				  if (onsucess)
+				  if (onsuccess)
 					  onsuccess(ctx, this.responseText);
 			  }
 			  else {
