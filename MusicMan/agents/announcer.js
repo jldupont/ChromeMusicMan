@@ -27,6 +27,7 @@ var Announcer=function (){
 	this.max_retries=3;
 	this.sources={};
 	this.pubnub_keys={};
+	this.name="Announcer";
 };
 
 

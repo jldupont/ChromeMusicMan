@@ -29,6 +29,7 @@
 	function PubNub() {
 		this.channel="music";
 		this.keys={};
+		this.name="PubNub";
 	};
 
 	PubNub.method("onsuccess", function(ctx, response){
