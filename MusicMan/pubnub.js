@@ -137,7 +137,7 @@
 					}
 					each(liste, function(item){
 						if (item.source_uudi===undefined) {
-							console.warn("pubnub: message without a 'uuid': "+response);
+							console.warn("pubnub: message without a 'uuid': "+item);
 							return;
 						}
 						if (item.source_uudi==self.uuid) {
@@ -148,14 +148,14 @@
 						}
 						if (item.ts==undefined) {
 							if (self.debug) {
-								console.log("pubnub: message without timestamp: "+response);
+								console.log("pubnub: message without timestamp: "+item);
 								return;
 							}
 						}
 						var ts_delta=item.ts-localTS;
 						if (ts_delta>self.ts_threshold) {
 							if (debug){
-								console.log("pubnub: discard old message: "+response);
+								console.log("pubnub: discard old message: "+item);
 								return;
 							}
 						}
