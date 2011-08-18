@@ -17,6 +17,7 @@
  * 
  * MESSAGES OUT:
  * - announce_track
+ * - pubnub_error
  * 
  * @author Jean-Lou Dupont
  */
@@ -109,6 +110,7 @@ Announcer.method("announce", function(){
 		msg.retries--;
 		if (msg.retries==0) {
 			toDelete.push(source_name);
+			mswitch.publish({type: "pubnub_error"});
 		} else {
 			if (msg.wait>0) {
 				msg.wait--;
