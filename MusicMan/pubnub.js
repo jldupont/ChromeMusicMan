@@ -108,6 +108,7 @@
 			this.subscribe_current_delay++;
 			return;
 		}
+		this.subscribe_current_delay=0;
 		
 		var localTS=getUTCTimestamp();
 		
@@ -129,7 +130,10 @@
 					var respj=JSON.parse(response);
 					var liste=respj[0];
 					var server_ts=respj[1];
-					if (server_ts==self.last_server_timestamp){
+					var ts_check=server_ts==self.last_server_timestamp;
+					self.last_server_timestamp=server_ts;
+					
+					if (ts_check){
 						if (self.debug) {
 							console.log("pubnub: no new messages");
 							return;
