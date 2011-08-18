@@ -31,7 +31,15 @@
 		this.keys={};
 	};
 
-	PubNub.method("publish", function(msg, onsuccess, onerror){		
+	PubNub.method("onsuccess", function(ctx, response){
+		
+	}); 
+
+	PubNub.method("onerror", function(ctx, response){
+		
+	}); 
+	
+	PubNub.method("publish", function(msg){		
 		url=[
 		     PUBNUB_WS
 		     ,'publish'
@@ -43,7 +51,16 @@
 		     ,encode_url(msg)
 		     ];
 		
-		xdr(null, uri, onsuccess, onerror);
+		xdr(null, uri,
+				
+			//on success
+			function(){
+				
+			},
+			//on error
+			function(){
+				
+		});
 	});
 
 	PubNub.method("subscribe", function(){
