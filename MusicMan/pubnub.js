@@ -130,14 +130,15 @@
 					var respj=JSON.parse(response);
 					var liste=respj[0];
 					var server_ts=respj[1];
-					var ts_check=server_ts==self.last_server_timestamp;
+					var ts_check=(server_ts==self.last_server_timestamp);
+					//console.log("server_ts("+server_ts+") last_server_ts("+self.last_server_timestamp+")");
 					self.last_server_timestamp=server_ts;
 					
 					if (ts_check){
 						if (self.debug) {
 							console.log("pubnub: no new messages");
-							return;
 						};
+						return;
 					}
 					each(liste, function(item){
 						if (item.source_uudi===undefined) {
@@ -147,21 +148,21 @@
 						if (item.source_uudi==self.uuid) {
 							if (self.debug) {
 								console.log("pubnub: message from self discarded");
-								return;
 							}
+							return;							
 						}
 						if (item.ts==undefined) {
 							if (self.debug) {
 								console.log("pubnub: message without timestamp: "+item);
-								return;
 							}
+							return;							
 						}
 						var ts_delta=item.ts-localTS;
 						if (ts_delta>self.ts_threshold) {
 							if (debug){
 								console.log("pubnub: discard old message: "+item);
-								return;
 							}
+							return;							
 						}
 						// after all these checks, we can accept the message
 						mswitch.publish(item);
