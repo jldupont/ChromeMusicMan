@@ -218,3 +218,11 @@ function createUUID() {
     return uuid;
 }
 
+/*
+ * 
+ */
+function timestampUTC() {
+	var d=new Date();
+	return Date.parse(d.toUTCString());
+};
+
