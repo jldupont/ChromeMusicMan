@@ -10,6 +10,11 @@
  * 		- pubnub.js
  *      - mswitch.js
  * 
+ * MESSAGES IN:
+ * - current_track
+ * - pubnub_keys
+ * 
+ * 
  * @author Jean-Lou Dupont
  */
 
@@ -56,6 +61,11 @@ Announcer.method("mailbox", function(msg){
 	
 	if (msg.type=="pubnub_keys") {
 		this.pubnub_keys=msg.keys;
+		return true;
+	};
+	
+	if (msg.type=="current_track") {
+		this.toAnnounce(msg.source, msg);
 		return true;
 	};
 	
