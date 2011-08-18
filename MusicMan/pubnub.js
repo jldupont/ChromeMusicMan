@@ -16,6 +16,9 @@
  * 
  * https://pubsub.pubnub.com/publish/$pubkey/$subkey/$signature/$channel/$callback/$message
  * 
+ *  --> Returns [1,S] upon success
+ *  --> Returns [0, $error_msg]  upon error
+ * 
  * $signature can be '0'
  * 
  * https://pubsub.pubnub.com/subscribe/$subkey/$channel/$callback/$timetoken
@@ -32,14 +35,6 @@
 		this.name="PubNub";
 	};
 
-	PubNub.method("onsuccess", function(ctx, response){
-		
-	}); 
-
-	PubNub.method("onerror", function(ctx, response){
-		
-	}); 
-	
 	PubNub.method("publish", function(msg){		
 		url=[
 		     PUBNUB_WS
@@ -55,7 +50,9 @@
 		var self=this;
 		xdr(msg.source, url,
 				
-			//on success
+			//on success, from an HTTP request 
+			// point of view at least... Need to analyze
+			// PubNub protocol level too
 			function(ctx, response){
 				mswitch.publish({
 					type:    "announce_result"
