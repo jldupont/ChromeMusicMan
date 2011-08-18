@@ -60,5 +60,6 @@
 		
 	});//publish
 
-	mswitch=new _mswitch();	
+	mswitch=new _mswitch();
+	
 })();

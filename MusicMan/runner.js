@@ -7,57 +7,57 @@
  *   
  *   @dependencies:  oo.js
  */
+(window._ || function(){
 
+	function Runner(name) {
+		this.name=name;
+		
+		this.procs=[];	
+		this.tasks=[];
+		
+		var self=this;
+		setInterval(function(){
+			self.run(self);
+		}, 500);		
+	};
 
-function Runner(name) {
-	this.name=name;
-	
-	this.procs=[];	
-	this.tasks=[];
-	
-	var self=this;
-	setInterval(function(){
-		self.run(self);
-	}, 500);		
-};
-
-Runner.method("push_proc", function(p0, p1, p2){
-	if (typeof p0==="function")
-		this.procs.push({ fn:p0, param: p1 });
-	else
-		this.procs.push({ scope:p0, fn:p1, param: p2 });
-});
-
-Runner.method("push_task", function(p0, p1, p2){
-	if (typeof p0==="function")
-		this.tasks.push({ fn:p0, param: p1 });
-	else
-		this.tasks.push({ scope:p0, fn:p1, param: p2 });
-
-});
-
-
-Runner.method("run", function(self){
-
-	each(self.procs, function(proc){
-		var fn=proc.fn;
-		var scope=proc.scope;
-		if (scope===undefined || scope===null)
-			fn(proc.param);
+	Runner.method("push_proc", function(p0, p1, p2){
+		if (typeof p0==="function")
+			this.procs.push({ fn:p0, param: p1 });
 		else
-			fn.apply(scope, proc.param);
+			this.procs.push({ scope:p0, fn:p1, param: p2 });
 	});
 
-	var task=self.tasks.shift();
-	while(task !== undefined) {
-		var fn=task.fn;
-		var scope=task.scope;
-		if (scope===undefined || scope===null)
-			fn(task.param);
+	Runner.method("push_task", function(p0, p1, p2){
+		if (typeof p0==="function")
+			this.tasks.push({ fn:p0, param: p1 });
 		else
-			fn.apply(scope, task.param);
-		task=self.tasks.shift();
-	};
-});
+			this.tasks.push({ scope:p0, fn:p1, param: p2 });
+	});
 
-_=new Runner();
+
+	Runner.method("run", function(self){
+
+		each(self.procs, function(proc){
+			var scope=proc.scope;
+			if (scope===undefined || scope===null)
+				proc.fn(proc.param);
+			else
+				proc.fn.apply(scope, proc.param);
+		});
+
+		var task=self.tasks.shift();
+		while(task !== undefined) {
+			var scope=task.scope;
+			if (scope===undefined || scope===null)
+				task.fn(task.param);
+			else
+				task.fn.apply(scope, task.param);
+			task=self.tasks.shift();
+		};
+	});
+
+	_=new Runner();
+
+})();
+
