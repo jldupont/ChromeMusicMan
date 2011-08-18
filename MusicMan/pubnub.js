@@ -49,7 +49,7 @@
 		     ,0
 		     ,encode_url(this.channel)
 		     ,0
-		     ,encode_url(msg.toString())
+		     ,encode_url(JSON.stringify(msg))
 		     ];
 		
 		var self=this;
