@@ -35,6 +35,23 @@
 		this.name="PubNub";
 	};
 
+	PubNub.method("success", function(ctx, response){
+		mswitch.publish({
+			type:    "announce_result"
+			,ctx:    ctx
+			,status: "success"
+			,data:   response
+		});		
+	}); 	
+	PubNub.method("error", function(ctx, response){
+		mswitch.publish({
+			type:    "announce_result"
+			,ctx:    ctx
+			,status: "error"
+			,data:   response
+		});		
+	}); 	
+	
 	PubNub.method("publish", function(msg){		
 		url=[
 		     PUBNUB_WS
@@ -49,27 +66,26 @@
 		
 		var self=this;
 		xdr(msg.source, url,
-				
+			
 			//on success, from an HTTP request 
 			// point of view at least... Need to analyze
 			// PubNub protocol level too
 			function(ctx, response){
-				mswitch.publish({
-					type:    "announce_result"
-					,ctx:    ctx
-					,status: "success"
-					,data:   response
-				});
-			},
-			//on error
+			
+				try {
+					var rep=JSON.parse(response);
+					if (rep[0]==1)
+						self.success(ctx, response);
+					else
+						self.error(ctx, response);
+				}catch(e){
+					self.error(ctx, response);
+				}
+			}, //HTTP level success handler
 			function(ctx, response){
-				mswitch.publish({
-					type:	"announce_result"
-					,ctx:    ctx
-					,state: "error"
-					,data:  response
-				});
-			}
+				//on error
+				self.error(ctx, response);
+			}//HTTP level error handler
 		);//xdr
 		
 	});
