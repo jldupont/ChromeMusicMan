@@ -121,7 +121,7 @@
 		     ];
 		
 		var self=this;
-		xdr(msg, url,
+		xdr(null, url,
 			//on success
 			// [[records...], server_timestamp]
 			function(ctx, response){
