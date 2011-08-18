@@ -37,6 +37,8 @@
 		this.uuid=null;
 		this.last_server_timestamp=null;
 		this.ts_threshold=5; //seconds
+		this.subscribe_delay=2; //wait cycles
+		this.subscribe_current_delay=0;
 	};
 
 	PubNub.method("success", function(ctx, response){
@@ -102,6 +104,11 @@
 
 	PubNub.method("subscribe", function(){
 		
+		if (this.subscribe_current_delay!=this.subscribe_delay) {
+			this.subscribe_current_delay++;
+			return;
+		}
+		
 		var localTS=getUTCTimestamp();
 		
 		url=[
@@ -137,9 +144,24 @@
 						if (item.source_uudi==self.uuid) {
 							if (self.debug) {
 								console.log("pubnub: message from self discarded");
+								return;
 							}
 						}
-						
+						if (item.ts==undefined) {
+							if (self.debug) {
+								console.log("pubnub: message without timestamp: "+response);
+								return;
+							}
+						}
+						var ts_delta=item.ts-localTS;
+						if (ts_delta>self.ts_threshold) {
+							if (debug){
+								console.log("pubnub: discard old message: "+response);
+								return;
+							}
+						}
+						// after all these checks, we can accept the message
+						mswitch.publish(item);
 					});//each liste
 					
 				}catch(e){
@@ -201,6 +223,7 @@
 	// HELPERS
 
 	_pubnub=new PubNub(); //private
+	_.push_proc(_pubnub, _pubnub.subscribe);
 	mswitch.subscribe(_pubnub);
 	
 })();
