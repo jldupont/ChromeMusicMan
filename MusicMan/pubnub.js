@@ -117,7 +117,6 @@
 		     ,this.keys["subkey"]
 		     ,encode_url(this.channel)
 		     ,0
-		     ,encode_url(JSON.stringify(msg))
 		     ,localTS
 		     ];
 		
