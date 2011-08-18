@@ -52,12 +52,13 @@
 		     ];
 		
 		var self=this;
-		xdr(null, uri,
+		xdr(msg.source, uri,
 				
 			//on success
 			function(ctx, response){
 				mswitch.publish({
 					type:    "announce_result"
+					,ctx:    ctx
 					,status: "success"
 					,data:   response
 				});
@@ -66,6 +67,7 @@
 			function(ctx, response){
 				mswitch.publish({
 					type:	"announce_result"
+					,ctx:    ctx
 					,state: "error"
 					,data:  response
 				});
@@ -94,7 +96,7 @@
 		 * 
 		 */
 		if (msg.type=="announce_track") {
-			
+			this.publish(msg.toString());
 			return true;
 		};
 	});
