@@ -41,8 +41,8 @@ var Announcer=function (){
  * Replace or Insert
  */
 Announcer.method("toAnnounce", function(source_name, msg) {
-	console.log("toAnnounce");
-	console.log(msg);
+	//console.log("toAnnounce");
+	//console.log(msg);
 	
 	// get existing 'retries' from current entry for 'source'
 	// ... if it exists  OR insert a new one
@@ -65,7 +65,7 @@ Announcer.method("toAnnounce", function(source_name, msg) {
 // ******************************************************************************
 
 Announcer.method("mailbox", function(msg){
-	console.log("aAnnouncer.mailbox: "+msg.type);
+	//console.log("aAnnouncer.mailbox: "+msg.type);
 	
 	if (msg.type=="pubnub_keys") {
 		this.pubnub_keys=msg.keys;
@@ -79,13 +79,13 @@ Announcer.method("mailbox", function(msg){
 	
 	// CAUTION:  ctx==source
 	if (msg.type=="announce_result") {
-		console.log("Announcer: announce result: "+msg.status);
+		//console.log("Announcer: announce result: "+msg.status);
 		
 		var source=msg.ctx.source;
 		if (msg.status=="success") {
 			delete this.sources[source];
-			console.log("Announcer: success with '"+source+"'");
-			console.log(this.sources);
+			//console.log("Announcer: success with '"+source+"'");
+			//console.log(this.sources);
 			mswitch.publish({ type: "pubnub_ok" });
 		} else {
 			this.sources[source].inprogress=false;
@@ -115,8 +115,8 @@ Announcer.method("announce", function(){
 		if (msg.inprogress)
 			return;
 		
-		console.log("announce, source("+source_name+")");
-		console.log(msg);
+		//console.log("announce, source("+source_name+")");
+		//console.log(msg);
 		
 		msg.retries--;
 		if (msg.retries==0) {
@@ -133,7 +133,7 @@ Announcer.method("announce", function(){
 	});
 	
 	each(toDelete, function(source_name){
-		console.log("Deleting source("+source_name+")");
+		//console.log("Deleting source("+source_name+")");
 		delete self.sources[source_name];
 	});
 });
