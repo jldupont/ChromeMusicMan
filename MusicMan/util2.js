@@ -10,7 +10,7 @@ var XHR_READY_STATE_OPENED=1;
 var XHR_READY_STATE_DONE=4;
 
 function xdr(ctx, url, onsuccess, onerror){
-	var uri=url.join("/")
+	var uri=url.join("/");
 	var xhr = new XMLHttpRequest();
 	
 	xhr.open("GET", uri, true);

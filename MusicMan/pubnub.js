@@ -28,7 +28,7 @@
 
 (window._pubnub || function(){
 
-	var PUBNUB_WS="https://pubsub.pubnub.com/";
+	var PUBNUB_WS="https://pubsub.pubnub.com";
 
 	function PubNub() {
 		this.channel="music";
@@ -50,6 +50,8 @@
 		});		
 	}); 	
 	PubNub.method("error", function(ctx, response){
+		console.log("pubnub.error");
+		console.log(ctx);
 		mswitch.publish({
 			type:    "announce_result"
 			,ctx:    ctx

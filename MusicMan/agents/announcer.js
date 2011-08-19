@@ -80,7 +80,7 @@ Announcer.method("mailbox", function(msg){
 	// CAUTION:  ctx==source
 	if (msg.type=="announce_result") {
 		//console.log("Announcer: announce result: "+msg.status);
-		
+			
 		var source=msg.ctx.source;
 		if (msg.status=="success") {
 			delete this.sources[source];

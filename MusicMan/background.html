@@ -32,6 +32,8 @@
 			var ports={};
 			var _debug=false;
 			var ws=null;
+			var pubnub_error_count=0;
+			var PUBNUB_ERROR_THRESHOLD=3;
 			
 			// web-socket state
 			var ws_state=null;
@@ -219,6 +221,31 @@
 				var msg={ type: "pubnub_keys", keys: keys};
 				mswitch.publish(msg);
 			};			
+
+// =============================================================================================
+		function _backAgent() {
+		};
+
+		_backAgent.method("mailbox", function(msg){
+
+			if (msg.type=="pubnub_ok") {
+				// STATUS: pubnub is OK
+				return true;
+			};
+			if (msg.type=="pubnub_error") {
+				this.pubnub_error_count++;
+				if (this.pubnub_error_count>this.PUBNUB_ERROR_THRESHOLD) {
+					this.pubnub_error_count=0;
+					// STATUS: pubnub is down...
+				}
+				return true;
+			};
+			
+			return false;
+		});
+	
+		backAgent=new _backAgent();
+		mswitch.subscribe(backAgent);	
 			
 // =============================================================================================
 // =============================================================================================
@@ -234,7 +261,7 @@
 				type: "uuid"
 				,"uuid": uuid
 			});
-			
+
 		</script>
 	</head>
 </html>
