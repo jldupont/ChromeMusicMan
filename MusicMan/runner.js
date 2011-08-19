@@ -17,7 +17,7 @@
 		
 		var self=this;
 		setInterval(function(){
-			self.run(self);
+			self.run.apply(self);
 		}, 500);		
 	};
 
@@ -36,9 +36,9 @@
 	});
 
 
-	Runner.method("run", function(self){
+	Runner.method("run", function(){
 
-		each(self.procs, function(proc){
+		each(this.procs, function(proc){
 			var scope=proc.scope;
 			if (scope===undefined || scope===null)
 				proc.fn(proc.param);
@@ -46,14 +46,14 @@
 				proc.fn.apply(scope, proc.param);
 		});
 
-		var task=self.tasks.shift();
+		var task=this.tasks.shift();
 		while(task !== undefined) {
 			var scope=task.scope;
 			if (scope===undefined || scope===null)
 				task.fn(task.param);
 			else
 				task.fn.apply(scope, task.param);
-			task=self.tasks.shift();
+			task=this.tasks.shift();
 		};
 	});
 

@@ -15,7 +15,17 @@
 	function _mswitch() {
 
 		// all
-		this.subscribers=[];		
+		this.subscribers=[];
+		
+		this.debug=false;
+		this.log_interests=false;
+		
+		// keep out of logging
+		this.filters={
+			"pubnub_ok":true
+			,"uuid": true
+			,"pubnub_keys": true
+		};
 	};
 
 	/*
@@ -42,19 +52,23 @@
 			// check if the agent is *not* interested
 			var map=agent.mswitch_subscribe_map_not_interested || {};
 			
+			// If there is an entry, the agent was interested previously
 			if (map[msg.type]!==undefined) {
 				return;
 			};
 			
 			if (self.debug)
-				console.log("mswitch.publish '"+msg.type+"'");
+				if (self.filters[msg.type]!==true)				
+					console.log("mswitch.publish '"+msg.type+"' to agent '"+agent.name+"'");
 			
 			var result=agent.mailbox.call(agent, msg);
 			
 			if (result===false) {
 				map[msg.type]=true; //truly not intested
 				agent.mswitch_subscribe_map_not_interested=map;
-				console.log("mswitch: agent '"+agent.name+"' not interested in '"+msg.type+"'");
+				
+				if (this.log_interests)
+					console.log("mswitch: agent '"+agent.name+"' not interested in '"+msg.type+"'");
 			}
 		});//each
 		
