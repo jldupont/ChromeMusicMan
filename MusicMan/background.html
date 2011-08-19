@@ -136,11 +136,17 @@
 				});
 			};
 
+			function resolveState(state) {
+				if (state===null)
+					return "unknown";
+				return state===true ? "OK":"Error";
+			};
+			
 			function doSendStatus(sendResponse) {
 				sendResponse({
 					mtype: "status"
-					,pn_status: this.pn_status===true ? "OK":"Error"
-					,ws_status: this.ws_status===true ? "OK":"Error"
+					,pn_status: resolveState(this.pn_state)
+					,ws_status: resolveState(this.ws_state)
 				});
 			};
 
