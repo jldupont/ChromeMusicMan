@@ -149,15 +149,14 @@ Announcer.method("announce", function(){
 Announcer.method("doPubNubPublish", function(source_name, msg){
 	//console.log("Announcer.doPubNubPublish");
 	
+	var cmsg=copyObject(msg);
+	
 	msg.inprogress=true;
-	mswitch.publish({
-		type: "announce_track"
-		,source: msg.source
-		,ctx:    msg.source
-		,artist: msg.artist
-		,album:  msg.album
-		,song:   msg.song
-	});
+	
+	cmsg.subtype=cmsg.type;
+	cmsg.type="announce";
+	
+	mswitch.publish(cmsg);
 });
 
 aAnnouncer=new Announcer();

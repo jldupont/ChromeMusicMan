@@ -203,15 +203,9 @@
 		 * }
 		 * XXX
 		 */
-		if (msg.type=="announce_track") {
-			this.publish({
-				type:    "current_track"
-				,source_uuid: this.uuid
-				,source: msg.source
-				,artist: msg.artist
-				,album:  msg.album
-				,song:   msg.song
-			});
+		if (msg.type=="announce") {
+			msg.type=msg.subtype;
+			this.publish(msg);
 			return true;
 		};
 		
