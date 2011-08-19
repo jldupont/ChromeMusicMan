@@ -45,7 +45,8 @@
 			
 
 // ====================================================================================
-			
+// Web-Socket - channel with MediaKeys Server
+
 			var onOpen=function() {
 				if (_debug)
 					console.log("onOpen");
@@ -69,18 +70,16 @@
 			};
 			
 			var onMsg=function(str_msg){
-				console.log("onMsg: str_msg: "+str_msg);
+				console.log("ws.onMsg: str_msg: "+str_msg);
 				var msg=JSON.parse(str_msg);
 
 				if (msg.mtype!='mk_key_press')
 					return;
 
+				// @TODO update also MediaKeys Server...
 				msg.type=msg.mtype;
 				
-				_.push_task(function(){
-					sendMsgToTab(current_player_tabid, {'type': msg.key});
-				}, null);
-				
+				sendMsgToTab(current_player_tabid, {'type': msg.key});				
 			};
 
 // ==================================================================
@@ -137,12 +136,6 @@
 				});
 			};
 
-			function resolveState(state) {
-				if (state===null)
-					return "unknown";
-				return state===true ? "OK":"Error";
-			};
-			
 			function doSendStatus(sendResponse) {
 				sendResponse({
 					type: "status"
@@ -164,9 +157,8 @@
 					_.push_task(publishKeys);
 					return;
 				};
-				
-				console.log("config message: ");
-				console.log(msg);
+				//console.log("config message: ");
+				//console.log(msg);
 			};
 			
 			/*
@@ -262,6 +254,16 @@
 		mswitch.subscribe(backAgent);	
 			
 // =============================================================================================
+// HELPERS
+
+			function resolveState(state) {
+				if (state===null)
+					return "unknown";
+				return state===true ? "OK":"Error";
+			};
+			
+	
+	
 // =============================================================================================
 // =============================================================================================
 	
