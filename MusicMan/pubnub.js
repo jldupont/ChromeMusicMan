@@ -60,8 +60,18 @@
 			,data:   response
 		});		
 	}); 	
+
+	PubNub.method("isEnabled", function(ctx, response){
+		var enabled=safeGet(this.configData, "pubnub_enabled");
+		return enabled!==true && enabled!=="true";
+	});
 	
 	PubNub.method("publish", function(msg){
+		
+		if (this.isEnabled()) {
+			console.log("pubnub: not enabled");
+			return;
+		}
 		
 		// we need to add a timestamp to all
 		// outgoing messages in order to perform
@@ -106,6 +116,11 @@
 	});
 
 	PubNub.method("subscribe", function(){
+		
+		if (this.isEnabled()) {
+			console.log("pubnub: not enabled");
+			return;
+		}
 		
 		if (this.subscribe_current_delay!=this.subscribe_delay) {
 			this.subscribe_current_delay++;
