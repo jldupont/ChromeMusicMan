@@ -76,6 +76,11 @@ Announcer.method("mailbox", function(msg){
 		this.toAnnounce(msg.source, msg);
 		return true;
 	};
+
+	if (msg.type=="current_state") {
+		this.toAnnounce(msg.source, msg);
+		return true;
+	};
 	
 	// CAUTION:  ctx==source
 	if (msg.type=="announce_result") {

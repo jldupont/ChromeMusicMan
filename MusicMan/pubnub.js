@@ -224,14 +224,6 @@
 			return true;
 		};
 		
-		// need to announce this state to remote
-		// extension in order for the playback control
-		// to work as intended.
-		if (strStartsWith(msg.type, "current_")) {
-			
-			return true;
-		};
-		
 		// default is "not interested"
 		return false;
 	});
