@@ -7,6 +7,7 @@
  	Messages In:
  	- status?
  	- pubnub_keys
+ 	- pubnub_ok , pubnub_error
  	
   -->
 	<head>
@@ -230,6 +231,8 @@
 			};			
 
 // =============================================================================================
+// BACK AGENT
+
 		function _backAgent() {
 			this.name="BackAgent";
 		};
@@ -250,7 +253,8 @@
 				}
 				return true;
 			};
-			
+
+			// by default, "not interested"
 			return false;
 		});
 	
