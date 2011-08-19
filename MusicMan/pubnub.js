@@ -4,7 +4,7 @@
  * 
  * Dependencies:
  * - oo.js
- * - util.js
+ * - util.js   (safeGet)
  * - mswitch.js
  * 
  * MESSAGES IN:
@@ -71,8 +71,8 @@
 		url=[
 		     PUBNUB_WS
 		     ,'publish'
-		     ,this.configData["pubnub_keys"]["pubkey"]
-		     ,this.configData["pubnub_keys"]["subkey"]
+		     ,safeGet(this.configData, "pubnub_keys", "pubkey")
+		     ,safeGet(this.configData, "pubnub_keys", "subkey")
 		     ,0
 		     ,encode_url(this.channel)
 		     ,0
@@ -118,7 +118,7 @@
 		url=[
 		     PUBNUB_WS
 		     ,'subscribe'
-		     ,this.configData["pubnub_keys"]["subkey"]
+		     ,safeGet(this.configData, "pubnub_keys", "subkey")
 		     ,encode_url(this.channel)
 		     ,0
 		     ,localTS

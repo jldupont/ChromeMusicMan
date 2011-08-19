@@ -12,7 +12,7 @@
  *  - "status"
  * 
  * Dependencies:
- * 	- util2.js
+ * 	- util.js
  */
 config={};
 
@@ -33,16 +33,6 @@ function handle_apply_button_click(evt) {
 	config.keysChanged=false;
 	
 	sendConfigData();
-	/*
-	var form_data=getFormData("pubnub");
-	form_data["type"]="pubnub_keys";
-
-	chrome.extension.sendRequest(
-		form_data
-	, function(response) {
-		  console.log(response);
-		});
-	*/
 };
 
 /*

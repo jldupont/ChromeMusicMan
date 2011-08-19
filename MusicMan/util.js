@@ -6,6 +6,22 @@
 //=============================================================================
 // XHR
 
+function safeGet(o) {
+	if (o==undefined)
+		return null;
+	var io=o;
+	var result=null;
+	for (var i=1; arguments.length; i++) {
+		var field=arguments[i];
+		if (field === undefined)
+			break;
+		result=io[field];
+		io=result;
+	};
+	return result;
+};
+
+
 var XHR_READY_STATE_OPENED=1;
 var XHR_READY_STATE_DONE=4;
 
