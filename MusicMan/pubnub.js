@@ -136,10 +136,12 @@
 					//console.log("server_ts("+server_ts+") last_server_ts("+self.last_server_timestamp+")");
 					self.last_server_timestamp=server_ts;
 					
+					mswitch.publish({type:"pubnub_ok"});
+					
 					if (ts_check){
 						if (self.debug) {
 							console.log("pubnub: no new messages");
-						};
+						};	
 						return;
 					}
 					each(liste, function(item){
@@ -229,8 +231,12 @@
 	// HELPERS
 
 	_pubnub=new PubNub(); //private
+	
+	//_pubnub.debug=true;
+	
 	_.push_proc(_pubnub, _pubnub.subscribe);
 	mswitch.subscribe(_pubnub);
+	
 	
 })();
 

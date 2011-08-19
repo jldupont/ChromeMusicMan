@@ -28,18 +28,18 @@
 		
 			// Port tab id of the current player
 			//  i.e. the tab where the 'current_*' updates are coming from
-			var current_player_tabid=null;
-			var ports={};
-			var _debug=false;
-			var ws=null;
-			var pubnub_error_count=0;
-			var PUBNUB_ERROR_THRESHOLD=3;
+			current_player_tabid=null;
+			ports={};
+			_debug=false;
+			ws=null;
+			pubnub_error_count=0;
+			PUBNUB_ERROR_THRESHOLD=3;
 			
 			// web-socket state
-			var ws_state=null;
+			ws_state=null;
 
 			// PubNub state
-			var pn_state=null;
+			pn_state=null;
 			
 			
 
@@ -144,9 +144,9 @@
 			
 			function doSendStatus(sendResponse) {
 				sendResponse({
-					mtype: "status"
-					,pn_status: resolveState(this.pn_state)
-					,ws_status: resolveState(this.ws_state)
+					type: "status"
+					,pn_status: resolveState(pn_state)
+					,ws_status: resolveState(ws_state)
 				});
 			};
 
@@ -155,11 +155,11 @@
 			 */
 			function handle_config_message(msg, sendResponse) {
 
-				if (msg.mtype=="status?") {
+				if (msg.type=="status?") {
 					doSendStatus(sendResponse);
 					return;
 				}
-				if (msg.mtype=="pubnub_keys") {
+				if (msg.type=="pubnub_keys") {
 					_.push_task(publishKeys);
 					return;
 				};
@@ -231,21 +231,22 @@
 
 // =============================================================================================
 		function _backAgent() {
+			this.name="BackAgent";
 		};
 
 		_backAgent.method("mailbox", function(msg){
 
 			if (msg.type=="pubnub_ok") {
 				// STATUS: pubnub is OK
-				this.pn_state=true;
+				pn_state=true;
 				return true;
 			};
 			if (msg.type=="pubnub_error") {
-				this.pubnub_error_count++;
-				if (this.pubnub_error_count>this.PUBNUB_ERROR_THRESHOLD) {
-					this.pubnub_error_count=0;
+				pubnub_error_count++;
+				if (pubnub_error_count>PUBNUB_ERROR_THRESHOLD) {
+					pubnub_error_count=0;
 					// STATUS: pubnub is down...
-					this.pn_state=false;
+					pn_state=false;
 				}
 				return true;
 			};

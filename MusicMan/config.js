@@ -106,10 +106,10 @@ function doTasks() {
  */
 function updateStatus() {
 	chrome.extension.sendRequest(
-			{mtype: "status?"}
+			{type: "status?"}
 		, function(response) {
 			$("ws_status").textContent=response.ws_status;
-			$("pn_status").textContent=response.pn_status
+			$("pn_status").textContent=response.pn_status;
 			});		
 };
 
