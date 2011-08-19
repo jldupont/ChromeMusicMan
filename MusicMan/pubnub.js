@@ -9,7 +9,7 @@
  * 
  * MESSAGES IN:
  * - announce_track
- * - pubnub_keys
+ * - configData
  * - uuid
  * - current_*
  * 
@@ -33,7 +33,7 @@
 
 	function PubNub() {
 		this.channel="music";
-		this.keys={};
+		this.configData={};
 		this.name="PubNub";
 		this.uuid=null;
 		this.last_server_timestamp=null;
@@ -71,8 +71,8 @@
 		url=[
 		     PUBNUB_WS
 		     ,'publish'
-		     ,this.keys["pubkey"]
-		     ,this.keys["subkey"]
+		     ,this.configData["pubnub_keys"]["pubkey"]
+		     ,this.configData["pubnub_keys"]["subkey"]
 		     ,0
 		     ,encode_url(this.channel)
 		     ,0
@@ -118,7 +118,7 @@
 		url=[
 		     PUBNUB_WS
 		     ,'subscribe'
-		     ,this.keys["subkey"]
+		     ,this.configData["pubnub_keys"]["subkey"]
 		     ,encode_url(this.channel)
 		     ,0
 		     ,localTS
@@ -171,6 +171,8 @@
 							return;							
 						}
 						// after all these checks, we can accept the message
+						// * mark it as originating from a remote extension
+						item.fromRemote=true;
 						mswitch.publish(item);
 					});//each liste
 					
@@ -209,8 +211,8 @@
 			return true;
 		};
 		
-		if (msg.type=="pubnub_keys") {
-			this.keys=msg.keys;
+		if (msg.type=="configData") {
+			this.configData=msg;
 			return true; // we are interested
 		};
 		

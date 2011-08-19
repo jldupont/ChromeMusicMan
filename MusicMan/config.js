@@ -6,6 +6,7 @@
  * MESSAGES OUT:
  *  - "pubnub_keys"
  *  - "status?"
+ *  - configData
  * 
  * MESSAGES IN:
  *  - "status"
@@ -31,14 +32,17 @@ function handle_apply_button_click(evt) {
 	saveConfig();
 	config.keysChanged=false;
 	
+	sendConfigData();
+	/*
 	var form_data=getFormData("pubnub");
-	form_data["mtype"]="pubnub_keys";
+	form_data["type"]="pubnub_keys";
 
 	chrome.extension.sendRequest(
 		form_data
 	, function(response) {
 		  console.log(response);
-		});	
+		});
+	*/
 };
 
 /*
@@ -74,8 +78,10 @@ function set_apply_button_disable_state(state) {
 
 function handle_enabled_click(evt) {
 	
-	localStorage["pubnub_enabled"]=evt.target.checked || false;	
+	var enabled=evt.target.checked || false;
+	localStorage["pubnub_enabled"]=	enabled;
 	updatePnForm();
+	sendConfigData();	
 };
 
 /**
@@ -148,6 +154,21 @@ function initCheckboxes() {
 };
 
 // ======================================================================================
+// HELPERS
+
+function sendConfigData() {
+
+	var keys=getFormData("pubnub");
+	
+	chrome.extension.sendRequest(
+			{type: "configData"
+			,pubnub_enabled:  localStorage["pubnub_enabled"]
+			,pubnub_keys: keys                              
+			}
+		, function(response) {
+		}
+	);			
+};
 
 function getText(id) {
 	return $(id).value;

@@ -8,6 +8,9 @@
  	- status?
  	- pubnub_keys
  	- pubnub_ok , pubnub_error
+
+	Messages Out:
+	- configData
  	
   -->
 	<head>
@@ -128,7 +131,7 @@
 // -------------------
 			
 			var sendMsgToTab=function(tabid, msg) {
-				//console.log("SendMsgToTab: tabid("+tabid+"): "+msg.mtype);
+				//console.log("SendMsgToTab: tabid("+tabid+"): "+msg.type);
 				if (tabid==undefined || tabid==null) {
 					console.warn("SendMsgToTab: tabid invalid");
 					return;
@@ -154,8 +157,8 @@
 					doSendStatus(sendResponse);
 					return;
 				}
-				if (msg.type=="pubnub_keys") {
-					_.push_task(publishKeys);
+				if (msg.type=="configData") {
+					mswitch.publish(msg);
 					return;
 				};
 				//console.log("config message: ");
@@ -273,13 +276,16 @@
 				return state===true ? "OK":"Error";
 			};
 			
-			function publishKeys() {
+			function publishConfigData() {
 				var keys={
 						pubkey: localStorage["pubkey"]
 						,subkey: localStorage["subkey"]
 						,seckey: localStorage["seckey"]						
 						};
-				var msg={ type: "pubnub_keys", keys: keys};
+				var msg={ type: "configData", 
+						pubnub_keys: keys
+						,pubnub_enabled: localStorage["pubnub_enabled"]
+						};
 				mswitch.publish(msg);
 			};			
 
@@ -291,7 +297,7 @@
 	// INITIALIZATION
 	// **************
 	
-			_.push_task(publishKeys);
+			_.push_task(publishConfigData);
 
 			var uuid=localStorage["uuid"] || createUUID();
 			mswitch.publish({
