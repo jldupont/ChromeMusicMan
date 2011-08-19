@@ -4,7 +4,7 @@
  * NOTE:  'no interest' map stored in the Agent
  * 
  * @dependencies:
- * 	- oo.js
+ * 	- oo.js     ('.method')
  *  - util2.js  ('each')
  * 
  * @author Jean-Lou Dupont
@@ -31,7 +31,8 @@
 	/*
 	 * All Agents subscribe but each need to
 	 *  reply to a 'publish' with their "interest" 
-	 *  in a message type
+	 *  in a message type i.e. reply 'true' if they are 
+	 *  interested by a message-type they receive
 	 *  
 	 *  agent={name, scope, fn}
 	 */
@@ -63,7 +64,7 @@
 			
 			var result=agent.mailbox.call(agent, msg);
 			
-			if (result===false) {
+			if (result!==true) {
 				map[msg.type]=true; //truly not intested
 				agent.mswitch_subscribe_map_not_interested=map;
 				
