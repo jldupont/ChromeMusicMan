@@ -13,7 +13,6 @@
 	<head>
 		<script src="oo.js"></script>
 		<script src="util.js"></script>
-		<script src="util2.js"></script>
 		<script src="mswitch.js"></script>
 		<script src="runner.js"></script>
 		
@@ -211,17 +210,18 @@
 
 		    	ports[tid]=null;
 			});
+			
 // =============================================================================================
-			function publishKeys() {
-				var keys={
-						pubkey: localStorage["pubkey"]
-						,subkey: localStorage["subkey"]
-						,seckey: localStorage["seckey"]						
-						};
-				var msg={ type: "pubnub_keys", keys: keys};
-				mswitch.publish(msg);
-			};			
+// Current Player resolution
+//
+// Two options:
+//  - player is local:  the extension is receiving local "current_*" messages
+//  - player is remote: the extension is receiving remote "current_*" messages through pubnub
 
+
+
+
+	
 // =============================================================================================
 // BACK AGENT
 
@@ -262,6 +262,16 @@
 				return state===true ? "OK":"Error";
 			};
 			
+			function publishKeys() {
+				var keys={
+						pubkey: localStorage["pubkey"]
+						,subkey: localStorage["subkey"]
+						,seckey: localStorage["seckey"]						
+						};
+				var msg={ type: "pubnub_keys", keys: keys};
+				mswitch.publish(msg);
+			};			
+
 	
 	
 // =============================================================================================

@@ -5,7 +5,8 @@
  *  
  *   @author Jean-Lou Dupont
  *   
- *   @dependencies:  oo.js
+ *   @dependencies:  
+ *   - oo.js
  */
 (window._ || function(){
 

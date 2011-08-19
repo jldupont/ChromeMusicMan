@@ -4,13 +4,14 @@
  * 
  * Dependencies:
  * - oo.js
- * - util2.js
+ * - util.js
  * - mswitch.js
  * 
  * MESSAGES IN:
  * - announce_track
  * - pubnub_keys
  * - uuid
+ * - current_*
  * 
  * 
  * PubNub HTTP I/F:
@@ -220,6 +221,14 @@
 		
 		if (msg.type=="uuid") {
 			this.uuid=msg.uuid;
+			return true;
+		};
+		
+		// need to announce this state to remote
+		// extension in order for the playback control
+		// to work as intended.
+		if (strStartsWith(msg.type, "current_")) {
+			
 			return true;
 		};
 		

@@ -5,7 +5,7 @@
  * 
  * @dependencies:
  * 	- oo.js     ('.method')
- *  - util2.js  ('each')
+ *  - util.js   ('each')
  * 
  * @author Jean-Lou Dupont
  */
