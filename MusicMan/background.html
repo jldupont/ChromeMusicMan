@@ -28,18 +28,20 @@
 		
 			// Port tab id of the current player
 			//  i.e. the tab where the 'current_*' updates are coming from
-			current_player_tabid=null;
-			ports={};
-			_debug=false;
-			ws=null;
-			pubnub_error_count=0;
-			PUBNUB_ERROR_THRESHOLD=3;
+			var current_player_tabid=null;
+			var current_player_uuid=null;
+			
+			var ports={};
+			var _debug=false;
+			var ws=null;
+			var pubnub_error_count=0;
+			var PUBNUB_ERROR_THRESHOLD=3;
 			
 			// web-socket state
-			ws_state=null;
+			var ws_state=null;
 
 			// PubNub state
-			pn_state=null;
+			var pn_state=null;
 			
 			
 
@@ -193,11 +195,8 @@
 					console.log("New current player: "+sender_tab_id); 
 					};
 
-				if (type=="current_track") {
-					var cmsg=copyObject(msg)
-					mswitch.publish(cmsg);
-					return;
-				};
+				msg.source=uuid;
+				mswitch.publish(msg);
 			});
 
 			/* 
@@ -218,8 +217,22 @@
 //  - player is local:  the extension is receiving local "current_*" messages
 //  - player is remote: the extension is receiving remote "current_*" messages through pubnub
 
+		function _PlayerManager() {
+			this.name="PlayerManager";
+		};
+		_PlayerManager.method("mailbox", function(msg){
+			if (msg.type=="current_state") {
+				
+				current_player_uuid=msg.source;
+				return true;
+			}
 
+			return false; //optional since it is inferred by mswitch
+		});
 
+			
+		playerManager=new _PlayerManager();
+		mswitch.subscribe(playerManager);
 
 	
 // =============================================================================================

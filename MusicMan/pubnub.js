@@ -126,7 +126,8 @@
 		
 		var self=this;
 		xdr(null, url,
-			//on success
+				
+			// ***on success***
 			// [[records...], server_timestamp]
 			function(ctx, response){
 				try {
@@ -177,7 +178,7 @@
 					self.error(ctx, response);
 				}
 			},
-			//on error
+			//*** on error***
 			function(ctx, response){
 				self.error(ctx, response);
 			}
