@@ -139,7 +139,8 @@
 			function doSendStatus(sendResponse) {
 				sendResponse({
 					mtype: "status"
-					,data: "unknown"
+					,pn_status: this.pn_status===true ? "OK":"Error"
+					,ws_status: this.ws_status===true ? "OK":"Error"
 				});
 			};
 
@@ -230,6 +231,7 @@
 
 			if (msg.type=="pubnub_ok") {
 				// STATUS: pubnub is OK
+				this.pn_state=true;
 				return true;
 			};
 			if (msg.type=="pubnub_error") {
@@ -237,6 +239,7 @@
 				if (this.pubnub_error_count>this.PUBNUB_ERROR_THRESHOLD) {
 					this.pubnub_error_count=0;
 					// STATUS: pubnub is down...
+					this.pn_state=false;
 				}
 				return true;
 			};
