@@ -1,3 +1,3 @@
 zip:
-	cd MusicMan && zip ../ext.zip *.* -x test* 
+	cd MusicMan && zip ../ext.zip agents/*.* cs/*.* system/*.* res/*.* *.* -x test* 
 	
