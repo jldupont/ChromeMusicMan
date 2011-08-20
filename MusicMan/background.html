@@ -11,6 +11,7 @@
 
 	Messages Out:
 	- configData
+	- playback_control
  	
   -->
 	<head>
@@ -33,6 +34,7 @@
 			//  i.e. the tab where the 'current_*' updates are coming from
 			var current_player_tabid=null;
 			var current_player_uuid=null;
+			var current_player_is_local=null;
 
 			var uuid=null;
 			var ports={};
@@ -83,9 +85,10 @@
 				msg.source_uuid=uuid;
 				
 				// @TODO update also MediaKeys Server...
-				msg.type=msg.mtype;
-				
-				sendMsgToTab(current_player_tabid, {'type': msg.key});				
+				msg.type="playback_control";
+
+				mswitch.publish(msg);
+				//sendMsgToTab(current_player_tabid, {'type': msg.key});				
 			};
 
 			var ManageConnection=function() {
@@ -190,9 +193,11 @@
 				
 				if (sender_tab_id!=current_player_tabid) {
 					current_player_tabid=sender_tab_id;
-					dlog("New current player: "+sender_tab_id); 
+					dlog("New LOCAL current player, tabid: "+sender_tab_id); 
 				};
-
+				current_player_is_local=true;
+				
+				msg.source_local=true; // for sure this is LOCAL
 				msg.source_uuid=uuid;
 				mswitch.publish(msg);
 			});
@@ -212,14 +217,26 @@
 // Two options:
 //  - player is local:  the extension is receiving local "current_*" messages
 //  - player is remote: the extension is receiving remote "current_*" messages through pubnub
+//
+// Procedure:
+//  - if pubnub is disabled => send all MK to current player tab
+//  - if pubnub is enabled  => send to LOCAL or REMOTE
+//
 
 		function _PlayerManager() {
 			this.name="PlayerManager";
 		};
 		_PlayerManager.method("mailbox", function(msg){
-			if (msg.type=="current_state") {
-				
-				current_player_uuid=msg.source;
+
+			if (msg.type=="playback_control") {
+
+				return true;
+			};
+			
+			if (strStartsWith(msg.type=="current")) {
+				current_player_uuid=msg.source_uuid;
+				current_player_is_local=(current_player_uuid==uuid);
+				};
 				return true;
 			}
 
