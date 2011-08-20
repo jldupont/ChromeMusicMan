@@ -1,4 +1,5 @@
 /**
+ * Various utility functions
  * 
  * @author Jean-Lou Dupont
  */
@@ -12,12 +13,13 @@ function warn(msg) {
 	console.warn(msg);
 };
 
-
+/*
+ * safeGet(object, field level 1, field level 2, ...)
+ */
 function safeGet(o) {
 	if (o==undefined)
 		return null;
-	var io=o;
-	var result=null;
+	var io=o, result=null;
 	for (var i=1; arguments.length; i++) {
 		var field=arguments[i];
 		if (field === undefined)

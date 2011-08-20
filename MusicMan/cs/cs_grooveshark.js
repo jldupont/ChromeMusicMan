@@ -109,6 +109,17 @@ chrome.extension.onRequest.addListener(
 		};
 		if (type=='play-pause') {
 			doPlayPause();
-		};			  
+		};	
+		
+		/*
+		 * Need to take into account current state
+		 *  so as to not 'play' when we are really
+		 *  asked to 'stop'
+		 */
+		if (type=='stop') {
+			if (last_state=="play")
+				doPlayPause();
+		};	
+		
 });
 
