@@ -30,6 +30,7 @@ var Announcer=function (){
 	this.sources={};
 	this.pubnub_keys={};
 	this.name="Announcer";
+	this.uuid=null;
 };
 
 
@@ -66,6 +67,11 @@ Announcer.method("toAnnounce", function(source_name, msg) {
 
 Announcer.method("mailbox", function(msg){
 	//console.log("aAnnouncer.mailbox: "+msg.type);
+
+	if (msg.type=="uuid") {
+		this.uuid=msg.uuid;
+		return true;
+	};
 	
 	if (msg.type=="pubnub_keys") {
 		this.pubnub_keys=msg.keys;
@@ -148,6 +154,10 @@ Announcer.method("announce", function(){
  */
 Announcer.method("doPubNubPublish", function(source_name, msg){
 	//console.log("Announcer.doPubNubPublish");
+	
+	// cut loops!
+	if (msg.source_uuid!=this.uuid)
+		return;
 	
 	var cmsg=copyObject(msg);
 	

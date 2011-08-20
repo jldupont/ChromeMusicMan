@@ -164,11 +164,11 @@
 					//console.log(liste);
 					
 					each(liste, function(item){
-						if (item.source_uudi===undefined) {
+						if (item.source_uuid===undefined) {
 							//console.warn("pubnub: message without a 'uuid': "+item);
 							return;
 						}
-						if (item.source_uudi==self.uuid) {
+						if (item.source_uuid==self.uuid) {
 							dlog("pubnub: message from self discarded");
 							return;							
 						}
