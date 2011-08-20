@@ -100,7 +100,13 @@ function doNextSong() {
 };
 
 function doPlayPause() {
-	simulateClick("playButton");
+	if (last_state=="pause")
+		simulateClick("playButton");
+	else
+		simulateClick("pauseButton");
+};
+function doStop() {
+	simulateClick("pauseButton");
 };
 
 /**
@@ -110,7 +116,7 @@ chrome.extension.onRequest.addListener(
 	function(msg, sender, sendResponse) {
 		
 		console.log("gs.onMessage: type:"+msg.type);
-		var type=msg.mtype;
+		var type=msg.type;
 		
 		if (type=='previous') {
 			doPreviousSong();
@@ -127,8 +133,7 @@ chrome.extension.onRequest.addListener(
 		 *  asked to 'stop'
 		 */
 		if (type=='stop') {
-			if (last_state=="play")
-				doPlayPause();
+			doStop();
 		};			
 });
 
