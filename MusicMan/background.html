@@ -33,7 +33,8 @@
 			//  i.e. the tab where the 'current_*' updates are coming from
 			var current_player_tabid=null;
 			var current_player_uuid=null;
-			
+
+			var uuid=null;
 			var ports={};
 			var _debug=false;
 			var ws=null;
@@ -78,13 +79,27 @@
 
 				if (msg.mtype!='mk_key_press')
 					return;
-
+	
+				msg.source_uuid=uuid;
+				
 				// @TODO update also MediaKeys Server...
 				msg.type=msg.mtype;
 				
 				sendMsgToTab(current_player_tabid, {'type': msg.key});				
 			};
 
+			var ManageConnection=function() {
+				if (ws==null)
+					dlog("ManageConnection: ws is null");
+				
+				if ((ws==null) || !(ws.isConnected())) {
+					ws=new WS(onOpen, onMsg, onClose, onError, _debug);
+					ws.connect();					
+				};
+			};
+
+			_.push_proc(ManageConnection, null);
+						
 // ==================================================================
 //
 	
@@ -105,18 +120,6 @@
 					chrome.browserAction.setTitle({"title": "Music Man - "+"Warning..."});
 				}
 			};
-			
-			var ManageConnection=function() {
-				if (ws==null)
-					dlog("ManageConnection: ws is null");
-				
-				if ((ws==null) || !(ws.isConnected())) {
-					ws=new WS(onOpen, onMsg, onClose, onError, _debug);
-					ws.connect();					
-				};
-			};
-
-			_.push_proc(ManageConnection, null);
 			
 			
 // EXTENSION MESSAGING
@@ -190,7 +193,7 @@
 					dlog("New current player: "+sender_tab_id); 
 				};
 
-				msg.source=uuid;
+				msg.source_uuid=uuid;
 				mswitch.publish(msg);
 			});
 
@@ -289,7 +292,7 @@
 	
 			_.push_task(publishConfigData);
 
-			var uuid=localStorage["uuid"] || createUUID();
+			uuid=localStorage["uuid"] || createUUID();
 			mswitch.publish({
 				type: "uuid"
 				,"uuid": uuid
