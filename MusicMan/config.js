@@ -16,7 +16,7 @@
  */
 config={};
 
-config.pn_inputs=["pubkey", "subkey", "seckey"];
+config.pn_inputs=["pubkey", "subkey"];
 
 config.keysChanged=false;
 
@@ -166,6 +166,8 @@ function getText(id) {
 
 function setText(id, text) {
 	var e=$(id);
+	if (text==undefined)
+		text="";
 	e.value=text;
 };
 

@@ -150,15 +150,19 @@
 					var liste=respj[0];
 					var server_ts=respj[1];
 					var ts_check=(server_ts==self.last_server_timestamp);
-					//console.log("server_ts("+server_ts+") last_server_ts("+self.last_server_timestamp+")");
+					//console.log("server_ts("+server_ts+") last_server_ts("+self.last_server_timestamp+"): "+ts_check);
+					//console.log(response);
+					
 					self.last_server_timestamp=server_ts;
 					
 					mswitch.publish({type:"pubnub_ok"});
 					
 					if (ts_check){
-						dlog("pubnub: no new messages");
+						//dlog("pubnub: no new messages");
 						return;
 					}
+					//console.log(liste);
+					
 					each(liste, function(item){
 						if (item.source_uudi===undefined) {
 							//console.warn("pubnub: message without a 'uuid': "+item);
@@ -180,6 +184,8 @@
 						// after all these checks, we can accept the message
 						// * mark it as originating from a remote extension
 						item.fromRemote=true;
+						
+						console.log(item);
 						mswitch.publish(item);
 					});//each liste
 					
@@ -213,6 +219,7 @@
 		 * XXX
 		 */
 		if (msg.type=="announce") {
+			msg.source_uuid=this.uuid;
 			msg.type=msg.subtype;
 			this.publish(msg);
 			return true;

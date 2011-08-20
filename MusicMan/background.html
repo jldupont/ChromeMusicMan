@@ -28,7 +28,8 @@
 		<script>
 
 			mswitch.debug=false;
-		
+			var _debug=false;
+					
 			// Port tab id of the current player
 			//  i.e. the tab where the 'current_*' updates are coming from
 			var current_player_tabid=null;
@@ -38,7 +39,7 @@
 			var uuid=null;
 			var ports={};
 			var tabs={};
-			var _debug=false;
+
 			var ws=null;
 			var pubnub_error_count=0;
 			var PUBNUB_ERROR_THRESHOLD=3;
