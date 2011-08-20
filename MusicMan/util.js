@@ -6,7 +6,7 @@
 
 
 function dlog(msg) {
-	if (_debug)
+	if (window._debug)
 		console.log(msg);
 };
 function warn(msg) {
@@ -275,6 +275,8 @@ function sendMsg(type, source, msg) {
  * @return boolean
  */
 function strStartsWith(str, start_string) {
+	if (str==undefined)
+		return false;
 	return str.substr(0, start_string.length)==start_string;
 };
 

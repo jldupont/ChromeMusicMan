@@ -38,6 +38,7 @@
 
 			var uuid=null;
 			var ports={};
+			var tabs={};
 			var _debug=false;
 			var ws=null;
 			var pubnub_error_count=0;
@@ -127,7 +128,19 @@
 			
 // EXTENSION MESSAGING
 // -------------------
-			
+
+			function sendMsgToAllPlayerTabs(msg) {
+				for (var tabid in tabs) {
+					try {
+						sendMsgToTab( tab, msg );
+					} catch(e) {
+						// probably a stale tab id
+						console.log("Stable tabid: "+tabid);
+						delete tabs[tabid];
+					};
+				};
+			};
+
 			var sendMsgToTab=function(tabid, msg) {
 				//console.log("SendMsgToTab: tabid("+tabid+"): "+msg.type);
 				if (tabid==undefined || tabid==null) {
@@ -190,6 +203,8 @@
 				};
 
 				dlog("From tab("+sender_tab_id+"): "+msg.type);
+
+				tabs[sender_tab_id]=msg.source;
 				
 				if (sender_tab_id!=current_player_tabid) {
 					current_player_tabid=sender_tab_id;
@@ -230,17 +245,27 @@
 
 			if (msg.type=="playback_control") {
 
+				if (current_player_is_local) {
+					sendMsgToTab(current_player_tabid, {'type': msg.key});
+				} else {
+					// if the player is remote, it will get the message
+					// through pubnub
+					// If the pressed key is 'stop', send to all local
+					// players just in case...
+					if (msg.key=="stop")
+						sendMsgToAllPlayerTabs({'type': "stop"});
+				};
 				return true;
 			};
 			
-			if (strStartsWith(msg.type=="current")) {
+			if (strStartsWith(msg.type, "current")) {
 				current_player_uuid=msg.source_uuid;
 				current_player_is_local=(current_player_uuid==uuid);
-				};
 				return true;
-			}
-
-			return false; //optional since it is inferred by mswitch
+			};	
+		
+		 	//optional since it is inferred by mswitch
+			return false;
 		});
 			
 		playerManager=new _PlayerManager();
