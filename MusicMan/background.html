@@ -52,8 +52,7 @@
 // Web-Socket - channel with MediaKeys Server
 
 			var onOpen=function() {
-				if (_debug)
-					console.log("onOpen");
+				dlog("onOpen");
 				
 				ws_state=true;
 				_.push_task(displayConnectionStatus);
@@ -64,8 +63,7 @@
 				if (wasOpen)
 					_.push_task(displayConnectionStatus);
 				
-				if (_debug)
-					console.log("onClose");
+				dlog("onClose");
 				ws=null;
 			};
 
@@ -74,7 +72,8 @@
 			};
 			
 			var onMsg=function(str_msg){
-				console.log("ws.onMsg: str_msg: "+str_msg);
+				dlog("ws.onMsg: str_msg: "+str_msg);
+				
 				var msg=JSON.parse(str_msg);
 
 				if (msg.mtype!='mk_key_press')
@@ -109,8 +108,7 @@
 			
 			var ManageConnection=function() {
 				if (ws==null)
-					if (_debug)
-						console.log("ManageConnection: ws is null");
+					dlog("ManageConnection: ws is null");
 				
 				if ((ws==null) || !(ws.isConnected())) {
 					ws=new WS(onOpen, onMsg, onClose, onError, _debug);
@@ -118,13 +116,7 @@
 				};
 			};
 
-			var EnsureConnection=function(scheduler, param) {
-				//console.log("EnsureConnection: begin");
-				ManageConnection();
-				//console.log("EnsureConnection: end");
-			};
-
-			_.push_proc(EnsureConnection, null);
+			_.push_proc(ManageConnection, null);
 			
 			
 // EXTENSION MESSAGING
@@ -191,12 +183,12 @@
 					return;
 				};
 
-				console.log("From tab("+sender_tab_id+"): "+msg.type);
+				dlog("From tab("+sender_tab_id+"): "+msg.type);
 				
 				if (sender_tab_id!=current_player_tabid) {
 					current_player_tabid=sender_tab_id;
-					console.log("New current player: "+sender_tab_id); 
-					};
+					dlog("New current player: "+sender_tab_id); 
+				};
 
 				msg.source=uuid;
 				mswitch.publish(msg);
@@ -208,8 +200,6 @@
 			 */
 			chrome.extension.onConnect.addListener(function(port) {
 		    	var tid    = port.tab.id;
-		    	//var url    = port.tab.url;
-
 		    	ports[tid]=null;
 			});
 			

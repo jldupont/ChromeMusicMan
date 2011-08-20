@@ -3,8 +3,15 @@
  * @author Jean-Lou Dupont
  */
 
-//=============================================================================
-// XHR
+
+function dlog(msg) {
+	if (_debug)
+		console.log(msg);
+};
+function warn(msg) {
+	console.warn(msg);
+};
+
 
 function safeGet(o) {
 	if (o==undefined)
@@ -21,6 +28,8 @@ function safeGet(o) {
 	return result;
 };
 
+//=============================================================================
+//XHR
 
 var XHR_READY_STATE_OPENED=1;
 var XHR_READY_STATE_DONE=4;

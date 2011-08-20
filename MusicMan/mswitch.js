@@ -5,7 +5,7 @@
  * 
  * @dependencies:
  * 	- oo.js     ('.method')
- *  - util.js   ('each')
+ *  - util.js   ('each', 'dlog')
  * 
  * @author Jean-Lou Dupont
  */
@@ -69,7 +69,7 @@
 				agent.mswitch_subscribe_map_not_interested=map;
 				
 				if (this.log_interests)
-					console.log("mswitch: agent '"+agent.name+"' not interested in '"+msg.type+"'");
+					dlog("mswitch: agent '"+agent.name+"' not interested in '"+msg.type+"'");
 			}
 		});//each
 		

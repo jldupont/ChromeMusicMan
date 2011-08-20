@@ -118,7 +118,7 @@
 	PubNub.method("subscribe", function(){
 		
 		if (this.isEnabled()) {
-			console.log("pubnub: not enabled");
+			dlog("pubnub: not enabled");
 			return;
 		}
 		
@@ -156,9 +156,7 @@
 					mswitch.publish({type:"pubnub_ok"});
 					
 					if (ts_check){
-						if (self.debug) {
-							console.log("pubnub: no new messages");
-						};	
+						dlog("pubnub: no new messages");
 						return;
 					}
 					each(liste, function(item){
@@ -167,22 +165,16 @@
 							return;
 						}
 						if (item.source_uudi==self.uuid) {
-							if (self.debug) {
-								console.log("pubnub: message from self discarded");
-							}
+							dlog("pubnub: message from self discarded");
 							return;							
 						}
 						if (item.ts==undefined) {
-							if (self.debug) {
-								console.log("pubnub: message without timestamp: "+item);
-							}
+							dlog("pubnub: message without timestamp: "+item);
 							return;							
 						}
 						var ts_delta=item.ts-localTS;
 						if (ts_delta>self.ts_threshold) {
-							if (debug){
-								console.log("pubnub: discard old message: "+item);
-							}
+							dlog("pubnub: discard old message: "+item);
 							return;							
 						}
 						// after all these checks, we can accept the message
