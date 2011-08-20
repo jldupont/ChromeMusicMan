@@ -112,7 +112,6 @@ function updateStatus() {
 function saveConfig() {
 	localStorage["pubkey"]=getText("pubkey");
 	localStorage["subkey"]=getText("subkey");
-	localStorage["seckey"]=getText("seckey");
 	localStorage["pubnub_enabled"]=$("pn_enabled").checked || false;
 };
 
@@ -135,7 +134,6 @@ function initDisplay() {
 function initKeys() {
 	setText("pubkey", localStorage["pubkey"]);
 	setText("subkey", localStorage["subkey"]);
-	setText("seckey", localStorage["seckey"]);
 };
 
 function initCheckboxes() {

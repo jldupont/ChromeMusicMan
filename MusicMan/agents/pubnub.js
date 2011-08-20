@@ -185,7 +185,7 @@
 						// * mark it as originating from a remote extension
 						item.fromRemote=true;
 						
-						console.log(item);
+						//console.log(item);
 						mswitch.publish(item);
 					});//each liste
 					
