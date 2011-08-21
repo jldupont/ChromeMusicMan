@@ -150,12 +150,12 @@
 				try {
 					var respj=JSON.parse(response);
 					var liste=respj[0];
-					var server_ts=respj[1];
+					var server_ts=respj[1]+"";
 					var ts_check=(server_ts==localStorage["pubnub_last_server_timestamp"]);
 					//console.log("server_ts("+server_ts+") last_server_ts("+self.last_server_timestamp+"): "+ts_check);
 					//console.log(response);
 					
-					localStorage["pubnub_last_server_timestamp"]=server_ts;
+					localStorage["pubnub_last_server_timestamp"]=respj[1];
 					
 					mswitch.publish({type:"pubnub_ok"});
 					
