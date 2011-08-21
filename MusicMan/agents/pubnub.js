@@ -193,6 +193,8 @@
 					};
 					liste.sort(sortMsgBySeq);
 					
+					//console.log(liste);
+					
 					each(liste, function(item){
 						
 						//console.log(item);
@@ -215,11 +217,11 @@
 						}
 						
 											
-						var ts_delta=item.ts-localTS;
-						if (ts_delta>self.ts_threshold) {
-							olog(self, "pubnub.subscribe: discard old message, localTS: "+localTS, true);
-							return;							
-						}
+						//var ts_delta=item.ts-localTS;
+						//if (ts_delta>self.ts_threshold) {
+						//	olog(self, "pubnub.subscribe: discard old message, localTS: "+localTS, true);
+						//	return;							
+						//}
 						// finally, check the SEQ# against our tracking
 						var last_seq=pubnub_sources[item.source_uuid] || -1;
 						
