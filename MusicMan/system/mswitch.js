@@ -25,6 +25,9 @@
 		
 		this.debug=false;
 		this.log_interests=false;
+
+		this.reported_undecided={};
+		this.decoders={};
 		
 		// keep out of logging
 		this.filters={
@@ -52,10 +55,7 @@
 			return;
 		};
 		
-		if (this.debug) {
-			if (this.filters[msg.type]!==true)
-				console.log("mswitch.publish: '"+msg.type+"' fromRemote("+msg.fromRemote+") fromLocal("+msg.fromLocal+")");
-		};
+		this.dump(msg);
 		
 		var self=this; // for the closures below
 		
@@ -75,8 +75,14 @@
 			
 			var result=agent.mailbox.call(agent, msg);
 			
-			if (result===undefined)
-				console.log("mswitch.publish '"+msg.type+"': Agent '"+agent.name+"' is undecided...");
+			if (result===undefined) {
+				var key=agent.name+msg.type;
+				if (!this.reported_undecided[key]) {
+					console.log("mswitch.publish '"+msg.type+"': Agent '"+agent.name+"' is undecided...");
+					return
+				}
+				this.reported_undecided[key]=true;
+			};
 			
 			if (result===false) {
 				map[msg.type]=true; //truly not intested
@@ -89,6 +95,34 @@
 		
 	});//publish
 
+	/*
+	 * For debug purposes
+	 */
+	_mswitch.method("decoder", function(type, decoder_function){
+		this.decoders[type]=decoder_function;
+	});
+	
+	_mswitch.method("dump", function(msg){
+		if (!this.debug)
+			return;
+		
+		if (this.filters[msg.type]==true)
+			return;
+		
+		var decoder=this.decoders[type];
+
+		var decoded="???";
+		if (decoder)
+			decoded=decoder(msg);
+		
+		this._dump(msg, decoded);
+	});
+	
+	_mswitch.method("_dump", function(msg, decoded){
+		console.log("mswitch.publish: '"+msg.type+"' fromRemote("+msg.fromRemote+") fromLocal("+msg.fromLocal+"): "+decoded);
+	});
+	
+	
 	mswitch=new _mswitch();
 	
 })();
