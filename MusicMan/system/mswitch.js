@@ -52,8 +52,9 @@
 			return;
 		};
 		
-		if (self.debug) {
-			console.log("mswitch.publish: '"+msg.type+"' fromRemote("+msg.fromRemote+") fromLocal("+msg.fromLocal+")");
+		if (this.debug) {
+			if (this.filters[msg.type]!==true)
+				console.log("mswitch.publish: '"+msg.type+"' fromRemote("+msg.fromRemote+") fromLocal("+msg.fromLocal+")");
 		};
 		
 		var self=this; // for the closures below
