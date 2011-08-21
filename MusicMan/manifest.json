@@ -1,6 +1,6 @@
 {
 	"name": "MusicMan",
-	"version": "0.20",
+	"version": "0.21",
 	"id": "oeaicnknihekgeliplmphcbnolahdolp",
 	"description": "Music Manager controls music web-site using the keyboard Media Keys", 
 	"background_page": "background.html",

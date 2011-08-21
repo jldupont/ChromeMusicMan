@@ -4,6 +4,10 @@
  * @author Jean-Lou Dupont
  */
 
+function olog(o, msg) {
+	if (o.debug)
+		console.log(msg);
+};
 
 function dlog(msg) {
 	if (window._debug)

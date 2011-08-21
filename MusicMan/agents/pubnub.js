@@ -32,6 +32,7 @@
 	var PUBNUB_WS="https://pubsub.pubnub.com";
 
 	function PubNub() {
+		this.debug=false;
 		this.channel="music";
 		this.configData={};
 		this.name="PubNub";
@@ -114,6 +115,8 @@
 					else
 						self.error(ctx, response);
 				}catch(e){
+					console.error("pubnub.publish ERROR: "+response);
+					console.error(e);
 					self.error(ctx, response);
 				}
 			}, //HTTP level success handler
@@ -128,7 +131,7 @@
 	PubNub.method("subscribe", function(){
 		
 		if (this.isEnabled()) {
-			dlog("pubnub: not enabled");
+			olog(this, "pubnub: not enabled");
 			return;
 		}
 		
@@ -168,7 +171,7 @@
 					mswitch.publish({type:"pubnub_ok"});
 					
 					if (ts_check){
-						//dlog("pubnub: no new messages");
+						//olog(self, "pubnub: no new messages");
 						return;
 					}
 					//console.log(liste);
@@ -176,32 +179,32 @@
 					each(liste, function(item){
 						
 						if (item.source_seq===undefined) {
-							dlog("pubnub: message without SEQ# discarded");
+							olog(self, "pubnub: message without SEQ# discarded");
 							return;
 						};
 						if (item.source_uuid===undefined) {
-							dlog("pubnub: message without a 'uuid'");
+							olog(self, "pubnub: message without a 'uuid'");
 							return;
 						}
 						if (item.source_uuid==self.uuid) {
-							dlog("pubnub: message from self discarded");
+							olog(self, "pubnub: message from self discarded");
 							return;							
 						}
 						if (item.ts==undefined) {
-							dlog("pubnub: message without timestamp");
+							olog(self, "pubnub: message without timestamp");
 							return;							
 						}
 						
 											
 						var ts_delta=item.ts-localTS;
 						if (ts_delta>self.ts_threshold) {
-							dlog("pubnub: discard old message, localTS: "+localTS);
+							olog(self, "pubnub: discard old message, localTS: "+localTS);
 							return;							
 						}
 						// finally, check the SEQ# against our tracking
 						var last_seq=self.subscribers[item.source_uuid] || -1;
 						if (item.source_seq<=last_seq) {
-							dlog("pubnub: message with old SEQ#: "+item.source_seq);
+							olog(self, "pubnub: message with old SEQ#: "+item.source_seq);
 							return;
 						};
 						
@@ -217,6 +220,8 @@
 					});//each liste
 					
 				}catch(e){
+					console.error("pubnub.subscribe ERROR: "+response);
+					console.error(e);
 					self.error(ctx, response);
 				}
 			},
