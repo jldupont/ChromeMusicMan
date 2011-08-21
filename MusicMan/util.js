@@ -4,9 +4,32 @@
  * @author Jean-Lou Dupont
  */
 
-function olog(o, msg) {
-	if (o.debug)
-		console.log(msg);
+function saveObjectToLocalStorage(key, o) {
+	try {
+		var data=JSON.stringify(o);
+		localStorage[key]=data;
+	}catch(e){
+		console.error("saveObjectToLocalStorage: "+e);
+	}
+};
+
+function getObjectFromLocalStorage(key) {
+	var data=null;
+	try{
+		data=localStorage[key];
+		if (data=="undefined" || data==undefined)
+			return {};
+		return JSON.parse(data);
+	}catch(e){
+		console.error("getObjectFromLocalStorage: "+e+", raw: "+data);
+	};
+	return {};
+};
+
+function olog(o, msg, detail) {
+	if (detail==undefined || detail==false || (detail && o.debug_details))
+		if (o.debug)
+			console.log(msg);
 };
 
 function dlog(msg) {

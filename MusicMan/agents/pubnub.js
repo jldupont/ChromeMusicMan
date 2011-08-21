@@ -32,6 +32,7 @@
 	var PUBNUB_WS="https://pubsub.pubnub.com";
 
 	function PubNub() {
+		this.debug_details=false;
 		this.debug=false;
 		this.channel="music";
 		this.configData={};
@@ -153,6 +154,8 @@
 		     ];
 		
 		var self=this;
+		var pubnub_sources=getObjectFromLocalStorage("pubnub_sources");
+		
 		xdr(null, url,
 				
 			// subscribe: ***on success***
@@ -195,44 +198,48 @@
 						//console.log(item);
 						
 						if (item.source_seq===undefined) {
-							olog(self, "pubnub: message without SEQ# discarded");
+							olog(self, "pubnub.subscribe: message without SEQ# discarded from: "+item.source_uuid, true);
 							return;
 						};
 						if (item.source_uuid===undefined) {
-							olog(self, "pubnub: message without a 'uuid'");
+							olog(self, "pubnub.subscribe: message without a 'uuid'", true);
 							return;
 						}
 						if (item.source_uuid==self.uuid) {
-							olog(self, "pubnub: message from self discarded");
+							olog(self, "pubnub.subscribe: message from self discarded", true);
 							return;							
 						}
 						if (item.ts==undefined) {
-							olog(self, "pubnub: message without timestamp");
+							olog(self, "pubnub.subscribe: message without timestamp", true);
 							return;							
 						}
 						
 											
 						var ts_delta=item.ts-localTS;
 						if (ts_delta>self.ts_threshold) {
-							olog(self, "pubnub: discard old message, localTS: "+localTS);
+							olog(self, "pubnub.subscribe: discard old message, localTS: "+localTS, true);
 							return;							
 						}
 						// finally, check the SEQ# against our tracking
-						var last_seq=self.subscribers[item.source_uuid] || -1;
+						var last_seq=pubnub_sources[item.source_uuid] || -1;
 						
-						console.log("pubnub.subscribe: source seq("+item.source_seq+"), last seq("+last_seq+")");
+						//console.log("pubnub.subscribe: source seq("+item.source_seq+"), last seq("+last_seq+")");
 						
 						if (item.source_seq<=last_seq) {
-							olog(self, "pubnub: message with old SEQ#: "+item.source_seq);
+							olog(self, "pubnub.subscribe: message with old SEQ("+item.source_seq+") from:"+item.source_uuid, true);
+							saveObjectToLocalStorage("pubnub_sources", pubnub_sources);
 							return;
 						};
 						
-						self.subscribers[item.source_uuid]=item.source_seq;
+						pubnub_sources[item.source_uuid]=item.source_seq;
+						saveObjectToLocalStorage("pubnub_sources", pubnub_sources);
 						                 
 						// after all these checks, we can accept the message
 						// * mark it as originating from a remote extension
 						item.fromRemote=true;
 						item.fromLocal=false;
+						
+						olog(self, "pubnub.subscribe: ACCEPTED SEQ("+item.source_seq+") from("+item.source_uuid+"): "+item.type, false);
 						
 						mswitch.publish(item);
 					});//each liste

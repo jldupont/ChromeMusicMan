@@ -96,7 +96,7 @@
 
 
 			function playback_control_decoder(msg) {
-				return "key= "+msg.key+", SEQ("+msg.source_seq+") UUID("+msg.source_uuid+") REMOTE("+msg.fromRemote+") LOCAL("+msg.fromLocal+")";
+				return "key= "+msg.key+", SEQ("+msg.source_seq+") UUID("+msg.source_uuid+")";
 			};
 
 			mswitch.decoder("playback_control", playback_control_decoder);
