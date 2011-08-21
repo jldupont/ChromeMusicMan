@@ -36,7 +36,9 @@
 		this.configData={};
 		this.name="PubNub";
 		this.uuid=null;
-		this.last_server_timestamp=null;
+		
+		// need to use localStorage or else lots of replay...
+		//this.last_server_timestamp=null;
 		this.ts_threshold=5; //seconds
 		this.subscribe_delay=2; //wait cycles
 		this.subscribe_current_delay=0;
@@ -149,11 +151,11 @@
 					var respj=JSON.parse(response);
 					var liste=respj[0];
 					var server_ts=respj[1];
-					var ts_check=(server_ts==self.last_server_timestamp);
+					var ts_check=(server_ts==localStorage["pubnub_last_server_timestamp"]);
 					//console.log("server_ts("+server_ts+") last_server_ts("+self.last_server_timestamp+"): "+ts_check);
 					//console.log(response);
 					
-					self.last_server_timestamp=server_ts;
+					localStorage["pubnub_last_server_timestamp"]=server_ts;
 					
 					mswitch.publish({type:"pubnub_ok"});
 					
