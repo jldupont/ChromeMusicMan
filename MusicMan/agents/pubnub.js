@@ -161,7 +161,7 @@
 						//dlog("pubnub: no new messages");
 						return;
 					}
-					console.log(liste);
+					//console.log(liste);
 					
 					each(liste, function(item){
 						if (item.source_uuid===undefined) {

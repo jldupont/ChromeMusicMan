@@ -82,7 +82,9 @@
 
 				if (msg.mtype!='mk_key_press')
 					return;
-	
+
+				msg.fromRemote=false;
+				msg.fromLocal=true;
 				msg.source_uuid=uuid;
 				
 				// @TODO update also MediaKeys Server...
@@ -211,8 +213,9 @@
 					dlog("New LOCAL current player, tabid: "+sender_tab_id); 
 				};
 				current_player_is_local=true;
-				
-				msg.source_local=true; // for sure this is LOCAL
+
+				msg.fromRemote=false;
+				msg.fromLocal=true; // for sure this is LOCAL
 				msg.source_uuid=uuid;
 				mswitch.publish(msg);
 			});
@@ -243,6 +246,7 @@
 		};
 		_PlayerManager.method("mailbox", function(msg){
 
+			// we just need to know if the current player is LOCAL or REMOTE
 			if (strStartsWith(msg.type, "current")) {
 				current_player_uuid=msg.source_uuid;
 				current_player_is_local=(current_player_uuid==uuid);
@@ -264,7 +268,6 @@
 				return true;
 			};
 			
-		 	//optional since it is inferred by mswitch
 			return false;
 		});
 			

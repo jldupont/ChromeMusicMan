@@ -12,7 +12,6 @@
  * 
  * MESSAGES IN:
  * - current_track
- * - pubnub_keys
  * - announce_result
  * 
  * MESSAGES OUT:
@@ -29,13 +28,12 @@ var Announcer=function (){
 	this.max_backoff=8; //seconds
 	this.max_retries=3;
 	this.sources={};
-	this.pubnub_keys={};
 	this.name="Announcer";
 	this.uuid=null;
 	this.canBeAnnounced={
 		current_track: true
 		,current_state: true
-		,"playback_control": true
+		,playback_control: true
 	};
 };
 
@@ -97,11 +95,6 @@ Announcer.method("mailbox", function(msg){
 		this.uuid=msg.uuid;
 		return true;
 	};
-	
-	if (msg.type=="pubnub_keys") {
-		this.pubnub_keys=msg.keys;
-		return true;
-	};	
 	
 	// CAUTION:  ctx==source
 	if (msg.type=="announce_result") {

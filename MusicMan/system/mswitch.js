@@ -52,6 +52,10 @@
 			return;
 		};
 		
+		if (self.debug) {
+			console.log("mswitch.publish: '"+msg.type+"' fromRemote("+msg.fromRemote+") fromLocal("+msg.fromLocal+")");
+		};
+		
 		var self=this; // for the closures below
 		
 		each(self.subscribers, function(agent, _index){
