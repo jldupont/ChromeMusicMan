@@ -96,7 +96,7 @@
 
 
 			function playback_control_decoder(msg) {
-				return "key= "+msg.key;
+				return "key= "+msg.key+", SEQ("+msg.source_seq+") UUID("+msg.source_uuid+") REMOTE("+msg.fromRemote+") LOCAL("+msg.fromLocal+")";
 			};
 
 			mswitch.decoder("playback_control", playback_control_decoder);
@@ -357,6 +357,8 @@
 			_.push_task(publishConfigData);
 
 			uuid=localStorage["uuid"] || createUUID();
+			localStorage["uuid"]=uuid;
+			
 			mswitch.publish({
 				type: "uuid"
 				,"uuid": uuid

@@ -177,6 +177,19 @@
 					}
 					//console.log(liste);
 					
+					function sortMsgBySeq(a,b) {
+						if (a.source_seq && b.source_seq)
+							if (a.source_seq < b.source_seq)
+								return -1;
+							else {
+								if (a.source_seq>b.source_seq)
+									return 1;
+								return 0;
+							}
+						return 0; // doesn't matter
+					};
+					liste.sort(sortMsgBySeq);
+					
 					each(liste, function(item){
 						
 						//console.log(item);
