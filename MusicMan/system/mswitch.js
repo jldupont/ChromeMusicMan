@@ -110,7 +110,7 @@
 		if (this.filters[msg.type]==true)
 			return;
 		
-		var decoder=this.decoders[type];
+		var decoder=this.decoders[msg.type];
 
 		var decoded="???";
 		if (decoder)
