@@ -227,6 +227,18 @@
 				mswitch.publish(msg);
 			});
 
+			function current_state_decoder(msg) {
+				return "state= "+msg.state;
+			};
+
+			function current_track_decoder(msg) {
+				return "artist("+msg.artist+") album("+msg.album+") song("+msg.song+")";
+			};
+			
+
+			mswitch.decoder("current_state", current_state_decoder);
+			mswitch.decoder("current_track", current_track_decoder);
+			
 			/* 
 			 *  Content scripts connect through here
 			 *   Keep a reference to the tabs we can interact with
