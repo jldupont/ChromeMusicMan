@@ -138,6 +138,8 @@
 		}
 		this.subscribe_current_delay=0;
 			
+		var localTS=getUTCTimestamp();	
+		
 		url=[
 		     PUBNUB_WS
 		     ,'subscribe'
@@ -190,10 +192,10 @@
 							return;							
 						}
 						
-						var localTS=getUTCTimestamp();						
+											
 						var ts_delta=item.ts-localTS;
 						if (ts_delta>self.ts_threshold) {
-							dlog("pubnub: discard old message");
+							dlog("pubnub: discard old message, localTS: "+localTS);
 							return;							
 						}
 						// finally, check the SEQ# against our tracking
