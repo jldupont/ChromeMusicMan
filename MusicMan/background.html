@@ -243,6 +243,12 @@
 		};
 		_PlayerManager.method("mailbox", function(msg){
 
+			if (strStartsWith(msg.type, "current")) {
+				current_player_uuid=msg.source_uuid;
+				current_player_is_local=(current_player_uuid==uuid);
+				return true;
+			};	
+					
 			if (msg.type=="playback_control") {
 
 				if (current_player_is_local) {
@@ -258,12 +264,6 @@
 				return true;
 			};
 			
-			if (strStartsWith(msg.type, "current")) {
-				current_player_uuid=msg.source_uuid;
-				current_player_is_local=(current_player_uuid==uuid);
-				return true;
-			};	
-		
 		 	//optional since it is inferred by mswitch
 			return false;
 		});

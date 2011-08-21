@@ -142,7 +142,7 @@
 		var self=this;
 		xdr(null, url,
 				
-			// ***on success***
+			// subscribe: ***on success***
 			// [[records...], server_timestamp]
 			function(ctx, response){
 				try {
@@ -161,7 +161,7 @@
 						//dlog("pubnub: no new messages");
 						return;
 					}
-					//console.log(liste);
+					console.log(liste);
 					
 					each(liste, function(item){
 						if (item.source_uuid===undefined) {
@@ -184,6 +184,7 @@
 						// after all these checks, we can accept the message
 						// * mark it as originating from a remote extension
 						item.fromRemote=true;
+						item.fromLocal=false;
 						
 						//console.log(item);
 						mswitch.publish(item);

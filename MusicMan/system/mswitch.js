@@ -70,7 +70,10 @@
 			
 			var result=agent.mailbox.call(agent, msg);
 			
-			if (result!==true) {
+			if (result===undefined)
+				console.log("mswitch.publish '"+msg.type+"': Agent '"+agent.name+"' is undecided...");
+			
+			if (result===false) {
 				map[msg.type]=true; //truly not intested
 				agent.mswitch_subscribe_map_not_interested=map;
 				

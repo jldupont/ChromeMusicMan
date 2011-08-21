@@ -24,6 +24,7 @@
  */
 
 var Announcer=function (){
+	this.debug=false;
 	this.per_second=2;  //cycles per second
 	this.max_backoff=8; //seconds
 	this.max_retries=3;
@@ -31,6 +32,11 @@ var Announcer=function (){
 	this.pubnub_keys={};
 	this.name="Announcer";
 	this.uuid=null;
+	this.canBeAnnounced={
+		current_track: true
+		,current_state: true
+		,"playback_control": true
+	};
 };
 
 
@@ -65,9 +71,28 @@ Announcer.method("toAnnounce", function(source_name, msg) {
 // ******************************************************************************
 // ******************************************************************************
 
+
 Announcer.method("mailbox", function(msg){
 	//console.log("aAnnouncer.mailbox: "+msg.type);
 
+	if (msg.fromRemote==true) {
+		if (this.debug)
+			console.log("Announcer.mailbox: msg '"+msg.type+"' was from remote... discarded");
+		
+		// mswitch will interpret this as "undecided about msg.type"
+		return;
+	};
+	
+	if (this.canBeAnnounced[msg.type]==true) {
+		if (this.debug)
+			console.log("Announcer.mailbox: can be announced '"+msg.type+"'");
+
+		this.toAnnounce(msg.source, msg);
+		return true;
+	};
+	
+	// DO NOT CROSS OVER 
+	
 	if (msg.type=="uuid") {
 		this.uuid=msg.uuid;
 		return true;
@@ -76,17 +101,7 @@ Announcer.method("mailbox", function(msg){
 	if (msg.type=="pubnub_keys") {
 		this.pubnub_keys=msg.keys;
 		return true;
-	};
-	
-	if (msg.type=="current_track") {
-		this.toAnnounce(msg.source, msg);
-		return true;
-	};
-
-	if (msg.type=="current_state") {
-		this.toAnnounce(msg.source, msg);
-		return true;
-	};
+	};	
 	
 	// CAUTION:  ctx==source
 	if (msg.type=="announce_result") {
@@ -156,13 +171,17 @@ Announcer.method("doPubNubPublish", function(source_name, msg){
 	//console.log("Announcer.doPubNubPublish");
 	
 	// cut loops!
-	if (msg.source_uuid!=this.uuid)
+	if (msg.source_uuid!=this.uuid) {
+		if (this.debug)
+			console.log("Announcer.doPubNubPublish: msg '"+msg.type+"' was from remote... discarded")		
 		return;
+	}
 	
 	var cmsg=copyObject(msg);
 	
 	msg.inprogress=true;
 	
+	// bridge to PubNub Agent
 	cmsg.subtype=cmsg.type;
 	cmsg.type="announce";
 	
