@@ -24,6 +24,7 @@
 		this.subscribers=[];
 		
 		this.debug=false;
+		this.debug_details=false;
 		this.log_interests=false;
 
 		this.reported_undecided={};
@@ -69,7 +70,7 @@
 				return;
 			};
 			
-			if (self.debug)
+			if (self.debug_details)
 				if (self.filters[msg.type]!==true)				
 					console.log("mswitch.publish '"+msg.type+"' to agent '"+agent.name+"'");
 			

@@ -71,7 +71,7 @@ button_play_pause.addEventListener('DOMSubtreeModified', function(evt){
 	if (inverted_state=='play')  state='pause';
 	//console.log("Play/Pause state: "+state);
 	
-	if (state!=last_state) {
+	if (state!=last_state && state!="disabled") {
 		sendMsg('current_state', 'gs', {
 			'state': state
 		});
