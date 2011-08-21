@@ -59,8 +59,8 @@
 		});		
 	}); 	
 	PubNub.method("error", function(ctx, response){
-		console.log("pubnub.error");
-		console.log(ctx);
+		//console.log("pubnub.error");
+		//console.log(ctx);
 		mswitch.publish({
 			type:    "announce_result"
 			,ctx:    ctx
@@ -162,11 +162,12 @@
 					var respj=JSON.parse(response);
 					var liste=respj[0];
 					var server_ts=respj[1]+"";
-					var ts_check=(server_ts==localStorage["pubnub_last_server_timestamp"]);
-					//console.log("server_ts("+server_ts+") last_server_ts("+self.last_server_timestamp+"): "+ts_check);
+					var last_server_ts=localStorage["pubnub_last_server_timestamp"];
+					var ts_check=(server_ts==last_server_ts);
+					//console.log("server_ts("+server_ts+") last_server_ts("+last_server_ts+"): "+ts_check);
 					//console.log(response);
 					
-					localStorage["pubnub_last_server_timestamp"]=respj[1];
+					localStorage["pubnub_last_server_timestamp"]=respj[1]+"";
 					
 					mswitch.publish({type:"pubnub_ok"});
 					
@@ -177,6 +178,8 @@
 					//console.log(liste);
 					
 					each(liste, function(item){
+						
+						//console.log(item);
 						
 						if (item.source_seq===undefined) {
 							olog(self, "pubnub: message without SEQ# discarded");
@@ -203,19 +206,21 @@
 						}
 						// finally, check the SEQ# against our tracking
 						var last_seq=self.subscribers[item.source_uuid] || -1;
+						
+						console.log("pubnub.subscribe: source seq("+item.source_seq+"), last seq("+last_seq+")");
+						
 						if (item.source_seq<=last_seq) {
 							olog(self, "pubnub: message with old SEQ#: "+item.source_seq);
 							return;
 						};
 						
-						self.subscribers[item.source_uuid]=item.source.seq;
+						self.subscribers[item.source_uuid]=item.source_seq;
 						                 
 						// after all these checks, we can accept the message
 						// * mark it as originating from a remote extension
 						item.fromRemote=true;
 						item.fromLocal=false;
 						
-						//console.log(item);
 						mswitch.publish(item);
 					});//each liste
 					
@@ -229,7 +234,9 @@
 			function(ctx, response){
 				self.error(ctx, response);
 			}
-		);
+		);//XDR
+		
+		//console.log("pubnub.subscribe: END");
 	});
 
 	PubNub.method("mailbox", function(msg){
