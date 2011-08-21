@@ -36,10 +36,15 @@
 		this.configData={};
 		this.name="PubNub";
 		this.uuid=null;
+		this.seq=0;
+		
+		// keep track of incoming messages
+		// in order to perform garbage collection
+		this.subscribers={};
 		
 		// need to use localStorage or else lots of replay...
 		//this.last_server_timestamp=null;
-		this.ts_threshold=5; //seconds
+		this.ts_threshold=3; //seconds
 		this.subscribe_delay=2; //wait cycles
 		this.subscribe_current_delay=0;
 	};
@@ -79,6 +84,9 @@
 		// outgoing messages in order to perform
 		// garbage collection
 		msg.ts=getUTCTimestamp();
+		
+		// and a SEQ#
+		msg.source_seq=this.seq++;
 		
 		url=[
 		     PUBNUB_WS
@@ -129,9 +137,7 @@
 			return;
 		}
 		this.subscribe_current_delay=0;
-		
-		var localTS=getUTCTimestamp();
-		
+			
 		url=[
 		     PUBNUB_WS
 		     ,'subscribe'
@@ -166,8 +172,13 @@
 					//console.log(liste);
 					
 					each(liste, function(item){
+						
+						if (item.source_seq===undefined) {
+							dlog("pubnub: message without SEQ# discarded");
+							return;
+						};
 						if (item.source_uuid===undefined) {
-							//console.warn("pubnub: message without a 'uuid': "+item);
+							dlog("pubnub: message without a 'uuid'");
 							return;
 						}
 						if (item.source_uuid==self.uuid) {
@@ -175,14 +186,25 @@
 							return;							
 						}
 						if (item.ts==undefined) {
-							dlog("pubnub: message without timestamp: "+item);
+							dlog("pubnub: message without timestamp");
 							return;							
 						}
+						
+						var localTS=getUTCTimestamp();						
 						var ts_delta=item.ts-localTS;
 						if (ts_delta>self.ts_threshold) {
-							dlog("pubnub: discard old message: "+item);
+							dlog("pubnub: discard old message");
 							return;							
 						}
+						// finally, check the SEQ# against our tracking
+						var last_seq=self.subscribers[item.source_uuid] || -1;
+						if (item.source_seq<=last_seq) {
+							dlog("pubnub: message with old SEQ#: "+item.source_seq);
+							return;
+						};
+						
+						self.subscribers[item.source_uuid]=item.source.seq;
+						                 
 						// after all these checks, we can accept the message
 						// * mark it as originating from a remote extension
 						item.fromRemote=true;
