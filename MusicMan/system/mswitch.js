@@ -77,11 +77,12 @@
 			
 			if (result===undefined) {
 				var key=agent.name+msg.type;
-				if (!this.reported_undecided[key]) {
+				var decided=self.reported_undecided[key];
+				self.reported_undecided[key]=true;
+				if (!decided) {
 					console.log("mswitch.publish '"+msg.type+"': Agent '"+agent.name+"' is undecided...");
-					return
 				}
-				this.reported_undecided[key]=true;
+				return;
 			};
 			
 			if (result===false) {

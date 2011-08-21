@@ -100,6 +100,11 @@ Announcer.method("mailbox", function(msg){
 	if (msg.type=="announce_result") {
 		//console.log("Announcer: announce result: "+msg.status);
 			
+		if (msg.ctx==undefined) {
+			console.warn("Announcer.mailbox: msg.ctx is undefined...");
+			return;
+		};
+		
 		var source=msg.ctx.source;
 		if (msg.status=="success") {
 			delete this.sources[source];

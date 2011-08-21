@@ -94,6 +94,13 @@
 				//sendMsgToTab(current_player_tabid, {'type': msg.key});				
 			};
 
+
+			function playback_control_decoder(msg) {
+				return "key= "+msg.key;
+			};
+
+			mswitch.decoder("playback_control", playback_control_decoder);
+			
 			var ManageConnection=function() {
 				if (ws==null)
 					dlog("ManageConnection: ws is null");
