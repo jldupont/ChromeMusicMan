@@ -101,7 +101,7 @@ Announcer.method("mailbox", function(msg){
 		//console.log("Announcer: announce result: "+msg.status);
 			
 		if (msg.ctx==undefined) {
-			console.warn("Announcer.mailbox: msg.ctx is undefined...");
+			//console.warn("Announcer.mailbox: msg.ctx is undefined...");
 			return;
 		};
 		

@@ -150,14 +150,22 @@
 				};
 			};
 
+			/*
+			 * @return True if everything went fine
+			 */
 			var sendMsgToTab=function(tabid, msg) {
 				//console.log("SendMsgToTab: tabid("+tabid+"): "+msg.type);
 				if (tabid==undefined || tabid==null) {
 					console.warn("SendMsgToTab: tabid invalid");
 					return;
 				}
-				chrome.tabs.sendRequest(tabid, msg, function(response) {
-				});
+				try {
+					chrome.tabs.sendRequest(tabid, msg, function(response) {
+					});
+				} catch(e) {
+					return false;
+				};
+				return true;
 			};
 
 			function doSendStatus(sendResponse) {
@@ -275,7 +283,10 @@
 			if (msg.type=="playback_control") {
 
 				if (current_player_is_local) {
-					sendMsgToTab(current_player_tabid, {'type': msg.key});
+					var result=sendMsgToTab(current_player_tabid, {'type': msg.key});
+					if (!result) {
+						current_player_is_local=null;
+					}
 				} else {
 					// if the player is remote, it will get the message
 					// through pubnub
