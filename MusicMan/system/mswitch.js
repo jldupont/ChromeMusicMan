@@ -34,7 +34,6 @@
 		this.filters={
 			"pubnub_ok":true
 			,"uuid": true
-			,"pubnub_keys": true
 		};
 	};
 
