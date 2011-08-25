@@ -9,3 +9,5 @@ History
 0.26: First stable version
 
 0.27: Added Desktop Notification for "current track"
+
+0.28: Stable version

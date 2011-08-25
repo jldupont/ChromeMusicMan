@@ -91,7 +91,7 @@
 				// @TODO update also MediaKeys Server...
 				msg.type="playback_control";
 
-				mswitch.publish(msg);
+				mswitch.publish(msg, null);
 				//sendMsgToTab(current_player_tabid, {'type': msg.key});				
 			};
 
@@ -145,7 +145,7 @@
 						sendMsgToTab( tab, msg );
 					} catch(e) {
 						// probably a stale tab id
-						console.log("Stable tabid: "+tabid);
+						console.log("Stale tabid: "+tabid);
 						delete tabs[tabid];
 					};
 				};
@@ -187,7 +187,7 @@
 					return;
 				}
 				if (msg.type=="configData") {
-					mswitch.publish(msg);
+					mswitch.publish(msg, null);
 					return;
 				};
 				//console.log("config message: ");
@@ -233,7 +233,7 @@
 				msg.fromRemote=false;
 				msg.fromLocal=true; // for sure this is LOCAL
 				msg.source_uuid=uuid;
-				mswitch.publish(msg);
+				mswitch.publish(msg, null);
 			});
 
 			function current_state_decoder(msg) {
@@ -355,7 +355,7 @@
 						pubnub_keys: keys
 						,pubnub_enabled: localStorage["pubnub_enabled"]
 						};
-				mswitch.publish(msg);
+				mswitch.publish(msg, null);
 			};			
 
 	
@@ -374,7 +374,7 @@
 			mswitch.publish({
 				type: "uuid"
 				,"uuid": uuid
-			});
+			}, null);
 
 		</script>
 	</head>

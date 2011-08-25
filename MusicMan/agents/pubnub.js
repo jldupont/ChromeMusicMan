@@ -57,7 +57,7 @@
 			,ctx:    ctx
 			,status: "success"
 			,data:   response
-		});		
+		}, this);		
 	}); 	
 	PubNub.method("error", function(ctx, response){
 		//console.log("pubnub.error");
@@ -67,7 +67,7 @@
 			,ctx:    ctx
 			,status: "error"
 			,data:   response
-		});		
+		}, this);		
 	}); 	
 
 	PubNub.method("isEnabled", function(ctx, response){
@@ -172,7 +172,7 @@
 					
 					localStorage["pubnub_last_server_timestamp"]=respj[1]+"";
 					
-					mswitch.publish({type:"pubnub_ok"});
+					mswitch.publish({type:"pubnub_ok"}, self);
 					
 					if (ts_check){
 						//olog(self, "pubnub: no new messages");
@@ -243,7 +243,7 @@
 						
 						olog(self, "pubnub.subscribe: ACCEPTED SEQ("+item.source_seq+") from("+item.source_uuid+"): "+item.type, false);
 						
-						mswitch.publish(item);
+						mswitch.publish(item, self);
 					});//each liste
 					
 				}catch(e){
@@ -280,9 +280,12 @@
 		 * XXX
 		 */
 		if (msg.type=="announce") {
-			msg.source_uuid=this.uuid;
-			msg.type=msg.subtype;
-			this.publish(msg);
+			var cmsg=copyObject(msg);
+			
+			cmsg.source_uuid=this.uuid;
+			cmsg.type=cmsg.subtype;
+			
+			this.publish(cmsg);
 			return true;
 		};
 		

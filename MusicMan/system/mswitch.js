@@ -20,6 +20,7 @@
 
 	function _mswitch() {
 
+		this.seq=0;
 		// all
 		this.subscribers=[];
 		
@@ -49,17 +50,31 @@
 		this.subscribers.push(agent);
 	});
 
-	_mswitch.method("publish", function(msg){
+	_mswitch.method("publish", function(msg, source){
+		
+		if (source===undefined) {
+			console.error("mswitch.publish: source not specified");
+			return;
+		};
+		
 		if (msg.type===undefined) {
 			console.warn("mswitch.publish: type is undefined");
 			return;
 		};
 		
+		this.seq++;
 		this.dump(msg);
 		
 		var self=this; // for the closures below
 		
 		each(self.subscribers, function(agent, _index){
+		
+			if (agent==source) {
+				if (self.debug_details) {
+					console.log("mswitch.publish: discarding message to self...");
+				};
+				return;
+			};
 			
 			// check if the agent is *not* interested
 			var map=agent.mswitch_subscribe_map_not_interested || {};
@@ -70,10 +85,20 @@
 			};
 			
 			if (self.debug_details)
-				if (self.filters[msg.type]!==true)				
-					console.log("mswitch.publish '"+msg.type+"' to agent '"+agent.name+"'");
+				if (self.filters[msg.type]!==true)
+					if (source)
+						console.log("mswitch.publish("+self.seq+") '"+msg.type+"' to agent '"+agent.name+"' from: "+source.name);
+					else
+						console.log("mswitch.publish("+self.seq+") '"+msg.type+"' to agent '"+agent.name+"'");
 			
 			var result=agent.mailbox.call(agent, msg);
+			
+			if (result===true) {
+				var map=agent.mswitch_subscribe_interested || {};
+				map[msg.type]=true;
+				agent.mswitch_subscribe_interested=map;
+				return;
+			};
 			
 			if (result===undefined) {
 				var key=agent.name+msg.type;
