@@ -3,3 +3,9 @@ Google Chrome Extension used to control music playback on popular online music s
 
 This extension requires a [MediaKeys Server](http://www.systemical.com/doc/opensource/mediakeysserver).
  
+History
+=======
+
+0.26: First stable version
+
+0.27: Added Desktop Notification for "current track"
