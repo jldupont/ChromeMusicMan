@@ -227,12 +227,17 @@
 						
 						//console.log("pubnub.subscribe: source seq("+item.source_seq+"), last seq("+last_seq+")");
 						
-						if (item.source_seq > 10000) // need to weed-out old scheme 
+						if (item.source_seq > 10000) { // need to weed-out old scheme 
 							if (item.source_seq<=last_seq) {
 								olog(self, "pubnub.subscribe: message with old SEQ("+item.source_seq+") from:"+item.source_uuid, true);
 								saveObjectToLocalStorage("pubnub_sources", pubnub_sources);
 								return;
 							};
+						} else {
+							// weed-out...
+							olog(self, "pubnub.subscribe: weeding-out...");
+							return;
+						};
 						
 						pubnub_sources[item.source_uuid]=item.source_seq;
 						saveObjectToLocalStorage("pubnub_sources", pubnub_sources);
