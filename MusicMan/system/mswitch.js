@@ -71,7 +71,7 @@
 		
 			if (agent==source) {
 				if (self.debug_details) {
-					console.log("mswitch.publish: discarding message to self...");
+					//console.log("mswitch.publish: discarding message to self...");
 				};
 				return;
 			};

@@ -254,7 +254,7 @@ function grep( list, fun ) {
  */
 function supplant( str, values ) {
     return str.replace( MAGIC, function( _, match ) {
-        return values[match] || _
+        return values[match] || _;
     } );
 }
 
@@ -271,6 +271,19 @@ function createUUID() {
     var uuid = s.join("");
     return uuid;
 }
+
+/*
+ * Generate unique timstamp based sequence number
+ * 
+ * Works as long as it is **not** used more than 500 times per second
+ */
+var _LSBSeq= _LSBSeq || 0;
+
+function getUniqueTimestamp() {
+	var ts=getUTCTimeStamp();
+	_LSBSeq++;
+	return (ts+(_LSBSeq % 500));
+};
 
 /*
  * 

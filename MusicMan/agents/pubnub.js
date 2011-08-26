@@ -38,7 +38,6 @@
 		this.configData={};
 		this.name="PubNub";
 		this.uuid=null;
-		this.seq=0;
 		
 		// keep track of incoming messages
 		// in order to perform garbage collection
@@ -88,7 +87,7 @@
 		msg.ts=getUTCTimestamp();
 		
 		// and a SEQ#
-		msg.source_seq=this.seq++;
+		msg.source_seq=getUniqueTimestamp();
 		
 		url=[
 		     PUBNUB_WS
@@ -163,7 +162,7 @@
 			function(ctx, response){
 				try {
 					var respj=JSON.parse(response);
-					var liste=respj[0];
+					
 					var server_ts=respj[1]+"";
 					var last_server_ts=localStorage["pubnub_last_server_timestamp"];
 					var ts_check=(server_ts==last_server_ts);
@@ -191,6 +190,7 @@
 							}
 						return 0; // doesn't matter
 					};
+					var liste=respj[0];
 					liste.sort(sortMsgBySeq);
 					
 					//console.log(liste);
@@ -227,11 +227,12 @@
 						
 						//console.log("pubnub.subscribe: source seq("+item.source_seq+"), last seq("+last_seq+")");
 						
-						if (item.source_seq<=last_seq) {
-							olog(self, "pubnub.subscribe: message with old SEQ("+item.source_seq+") from:"+item.source_uuid, true);
-							saveObjectToLocalStorage("pubnub_sources", pubnub_sources);
-							return;
-						};
+						if (item.source_seq > 10000) // need to weed-out old scheme 
+							if (item.source_seq<=last_seq) {
+								olog(self, "pubnub.subscribe: message with old SEQ("+item.source_seq+") from:"+item.source_uuid, true);
+								saveObjectToLocalStorage("pubnub_sources", pubnub_sources);
+								return;
+							};
 						
 						pubnub_sources[item.source_uuid]=item.source_seq;
 						saveObjectToLocalStorage("pubnub_sources", pubnub_sources);
