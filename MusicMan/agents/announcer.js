@@ -185,7 +185,7 @@
 		cmsg.subtype=cmsg.type;
 		cmsg.type="announce";
 		
-		console.log("announcer.doPubNubPublish");
+		//console.log("announcer.doPubNubPublish");
 		mswitch.publish(cmsg, this);
 	});
 	
