@@ -280,7 +280,7 @@ function createUUID() {
 var _LSBSeq= _LSBSeq || 0;
 
 function getUniqueTimestamp() {
-	var ts=getUTCTimeStamp();
+	var ts=getUTCTimestamp();
 	_LSBSeq++;
 	return (ts+(_LSBSeq % 500));
 };
