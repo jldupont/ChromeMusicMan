@@ -197,6 +197,7 @@
 			/*
 			 *  Messages from:
 			 *	- content scripts
+			 *    'ping_from_current_player'
 			 *    'current_*' : [track|state]
 			 *
 			 *  - config page
@@ -216,19 +217,21 @@
 				var sender_tab_id=sender.tab.id;
 				var type=msg.type;
 
+				dlog("From tab("+sender_tab_id+"): "+msg.type);
+								
+				if (type=="ping_from_current_player" || strStartsWith(type, "current")) {
+					if (sender_tab_id!=current_player_tabid) {
+						current_player_tabid=sender_tab_id;
+						dlog("New LOCAL current player, tabid: "+sender_tab_id); 
+					};
+					current_player_is_local=true;
+				};
+				
 				if (!strStartsWith(type, "current")) {
 					return;
 				};
 
-				dlog("From tab("+sender_tab_id+"): "+msg.type);
-
 				tabs[sender_tab_id]=msg.source;
-				
-				if (sender_tab_id!=current_player_tabid) {
-					current_player_tabid=sender_tab_id;
-					dlog("New LOCAL current player, tabid: "+sender_tab_id); 
-				};
-				current_player_is_local=true;
 
 				msg.fromRemote=false;
 				msg.fromLocal=true; // for sure this is LOCAL

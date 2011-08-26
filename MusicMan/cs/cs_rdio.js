@@ -137,3 +137,7 @@ chrome.extension.onRequest.addListener(
 		};			
 });
 
+setInterval(5000, function(){
+	if (last_state=="play")
+		sendMsg('ping_from_current_player', 'rdio', {});
+});
