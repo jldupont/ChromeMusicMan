@@ -198,4 +198,16 @@
 	mswitch.subscribe(_announcer);
 
 
+	/*
+	 * 		type:    "announce_result"
+			,ctx:    ctx
+			,status: "success"
+			,data:   response
+	 */
+	function _announce_result_decoder(msg){
+		console.log("annouce_result: "+msg.status+" , response: "+msg.response);
+	};
+	
+	mswitch.decoder("announce_result", _announce_result_decoder);
+	
 })();
